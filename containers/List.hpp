@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 09:40:44 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 13:23:10 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/26 16:41:59 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,239 @@ namespace ft
 				len++;
 				return iterator(tmp);
 			}
+			void		insert(iterator pos, size_type n, const val_type& val)
+			{
+				while (n--)
+					pos = insert(pos, val);
+			}
+			template <class InputIterator>
+			void	insert(iterator pos, InputIterator start, InputIterator end)
+			{
+				while (start != end)
+				{
+					pos = insert(pos, *start);
+					start++;
+					if (pos != end())
+						pos++;
+				}
+			}
+			iterator	erase(iterator pos)
+			{
+				if (pos == begin())
+				{
+					pop_front();
+					return begin();
+				}
+				else if (pos == end())
+				{
+					pop_back();
+					return end();
+				}
+				node next = pos.node()->next;
+				node prev = pos.node()->prev;
+				delete pos.node();
+				prev->next = next;
+				next->prev = prev;
+				len--;
+				return iterator(next);
+			}
+			iterator	erase(iterator start, iterator end)
+			{
+				while (start != end)
+				{
+					erase(start);
+					start++;
+				}
+				return start;
+			}
+			void	swap(List& right)
+			{
+				ft::swap(len, right.len);
+				ft::swap(lst_head, right.lst_head);
+				ft::swap(lst_tail, right.lst_tail);
+			}
+			void	resize(size_type n, val_type val = val_type())
+			{
+				while (n < len)
+					pop_back();
+				while (n > len)
+					push_back(val);
+			}
+			void	clear(void)
+			{
+				node actual = lst_head->next;
+				while (actual != lst_tail)
+				{
+					node tmp = actual->next;
+					delete actual;
+					actual = tmp;
+				}
+				lst_head->next = lst_tail;
+				lst_tail->prev = lst_head;
+				len = 0;
+			}
+			void	splice(iterator pos, List& ls)
+			{
+				splice(pos, ls, ls.begin(), ls.end());
+			}
+			void	splice(iterator pos, List& ls, iterator it)
+			{
+				insert(pos, *it);
+				ls.erase(it);
+			}
+			void	splice(iterator pos, List& ls, iterator start, iterator end)
+			{
+				insert(pos, start, end);
+				ls.erase(start, end);
+			}
+			void	remove(const val_type& val)
+			{
+				iterator it = begin();
+				while (it != end())
+				{
+					if (*it == val)
+						it = erase(it);
+					else
+						it++;
+				}
+			}
+			template <class Predicate>
+			void	remove_if(Predicate pred)
+			{
+				iterator it = begin();
+				while (it != end())
+				{
+					if (pred(*it))
+						it = erase(it);
+					else
+						it++;
+				}
+			}
+			void	unique(void)
+			{
+				unique(same<val_type>());
+			}
+			template <class BinaryPredicate>
+			void	unique(BinaryPredicate binary_pred)
+			{
+				iterator prev = begin();
+				iterator next = prev;
+				while (nex + 1 != end())
+				{
+					next++;
+					if (binary_pred(*prev, *next))
+					{
+						erase(next);
+						next = prev;
+					}
+					else
+						prev = next;
+				}
+			}
+			template <class Compare>
+			void	merge(List& ls, Compare comp)
+			{
+				if (&ls == this)
+					return ;
+				insert(end(), ls.begin(), ls.end(()));
+				ls.clear();
+				sort(comp);
+			}
+			void	merge(List& ls)
+			{
+				merge(ls, less<val_type>);
+			}
+			template <class Compare>
+			void	sort(Compare comp)
+			{
+				iterator it = begin();
+				iterator tmp;
+				while(it + 1 != end())
+				{
+					tmp = it + 1;
+					while (b != end())
+					{
+						if (comp(*it, *tmp))
+							ft::swap(*it, *tmp);
+						tmp++;
+					}
+					it++;
+				}
+			}
+			void	sort(void)
+			{
+				sort(less<val_type>);
+			}
+			void	reverse(void)
+			{
+				List<val_type>	tmp;
+				iterator		it = begin();
+				while (it != end())
+				{
+					tmp.push_front(*it);
+					it++;
+				}
+				*this = tmp;
+			}
 	};
+	template <class T, class Alloc>
+	void	swap(List<T, Alloc>& a, List<T, Alloc>& b)
+	{
+		a.swap(b);
+	}
+	template <class T, class Alloc>
+	bool	operator==(const List<T, Alloc>& a, List<T, Alloc>& b)
+	{
+		if (!(a.size() == b.size()))
+			return false;
+		typename List<T>::const_iterator ita = a.begin();
+		typename List<T>::const_iterator itb = b.begin();
+		while (ita != a.end())
+		{
+			if (*ita != *itb)
+				return false;
+			ita++;
+			itb++;
+		}
+		return true;
+	}
+	template <typename T>
+	bool	operator!=(const List<T>& a, List<T>& b)
+	{
+		return (!(a = b));
+	}
+	template <typename T>
+	bool	operator<(const List<T>& a, List<T>& b)
+	{
+		if (a.size() < b.size())
+			return true;
+		if (a.size() > b.size())
+			return false;
+		typename List<T>::const_iterator ita = a.begin();
+		typename List<T>::const_iterator itb = b.begin();
+		while (ita != a.end())
+		{
+			if (*ita != *itb)
+				return (*ita < *itb);
+			ita++;
+			itb++;
+		}
+		return false;
+	}
+	template <typename T>
+	bool	operator<=(const List<T>& a, List<T>& b)
+	{
+		return (!(b < a));
+	}
+	template <typename T>
+	bool	operator<(const List<T>& a, List<T>& b)
+	{
+		return (b < a);
+	}
+	template <typename T>
+	bool	operator<(const List<T>& a, List<T>& b)
+	{
+		return (!(a < b));
+	}
 }
 #endif
