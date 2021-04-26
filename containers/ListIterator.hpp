@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:25:24 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 16:22:33 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/26 17:01:42 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ namespace ft
 		protected:
 			Node_ptr	ptr;
 
-		private:
+		public:
 			ListIterator(void)	{};
 			ListIterator(const ListIterator& src)
 			{
@@ -59,7 +59,7 @@ namespace ft
 			};
 			ListIterator&	operator--(void)
 			{
-				ptr = ptr->prev
+				ptr = ptr->prev;
 				return *this;
 			};
 			ListIterator	operator--(int _n)
@@ -104,13 +104,13 @@ namespace ft
 			ListIterator	operator+(int _n) const
 			{
 				ListIterator ret(*this);
-				ret += n;
+				ret += _n;
 				return ret;
 			};
 			ListIterator	operator-(int _n) const
 			{
 				ListIterator ret(*this);
-				ret -= n;
+				ret -= _n;
 				return ret;
 			};
 			ListIterator&	operator+=(int _n)
@@ -118,12 +118,12 @@ namespace ft
 				while (_n < 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n > 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -132,12 +132,12 @@ namespace ft
 				while (_n > 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n < 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -154,7 +154,7 @@ namespace ft
 		protected:
 			Node_ptr	ptr;
 
-		private:
+		public:
 			ConstListIterator(void)	{};
 			ConstListIterator(const ConstListIterator& src)
 			{
@@ -185,7 +185,7 @@ namespace ft
 			};
 			ConstListIterator&	operator--(void)
 			{
-				ptr = ptr->prev
+				ptr = ptr->prev;
 				return *this;
 			};
 			ConstListIterator	operator--(int _n)
@@ -230,13 +230,13 @@ namespace ft
 			ConstListIterator	operator+(int _n) const
 			{
 				ConstListIterator ret(*this);
-				ret += n;
+				ret += _n;
 				return ret;
 			};
 			ConstListIterator	operator-(int _n) const
 			{
 				ConstListIterator ret(*this);
-				ret -= n;
+				ret -= _n;
 				return ret;
 			};
 			ConstListIterator&	operator+=(int _n)
@@ -244,12 +244,12 @@ namespace ft
 				while (_n < 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n > 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -258,12 +258,12 @@ namespace ft
 				while (_n > 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n < 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -279,7 +279,7 @@ namespace ft
 		protected:
 			Node_ptr	ptr;
 
-		private:
+		public:
 			ReverseListIterator(void)	{};
 			ReverseListIterator(const ReverseListIterator& src)
 			{
@@ -310,7 +310,7 @@ namespace ft
 			};
 			ReverseListIterator&	operator--(void)
 			{
-				ptr = ptr->prev
+				ptr = ptr->prev;
 				return *this;
 			};
 			ReverseListIterator	operator--(int _n)
@@ -355,13 +355,13 @@ namespace ft
 			ReverseListIterator	operator+(int _n) const
 			{
 				ReverseListIterator ret(*this);
-				ret += n;
+				ret += _n;
 				return ret;
 			};
 			ReverseListIterator	operator-(int _n) const
 			{
 				ReverseListIterator ret(*this);
-				ret -= n;
+				ret -= _n;
 				return ret;
 			};
 			ReverseListIterator&	operator+=(int _n) const
@@ -369,12 +369,12 @@ namespace ft
 				while (_n < 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n > 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -383,12 +383,12 @@ namespace ft
 				while (_n > 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n < 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -405,7 +405,7 @@ namespace ft
 		protected:
 			Node_ptr	ptr;
 
-		private:
+		public:
 			ConstReverseListIterator(void)	{};
 			ConstReverseListIterator(const ConstReverseListIterator& src)
 			{
@@ -436,7 +436,7 @@ namespace ft
 			};
 			ConstReverseListIterator&	operator--(void)
 			{
-				ptr = ptr->prev
+				ptr = ptr->prev;
 				return *this;
 			};
 			ConstReverseListIterator	operator--(int _n)
@@ -481,13 +481,13 @@ namespace ft
 			ConstReverseListIterator	operator+(int _n) const
 			{
 				ConstReverseListIterator ret(*this);
-				ret += n;
+				ret += _n;
 				return ret;
 			};
 			ConstReverseListIterator	operator-(int _n) const
 			{
 				ConstReverseListIterator ret(*this);
-				ret -= n;
+				ret -= _n;
 				return ret;
 			};
 			ConstReverseListIterator&	operator+=(int _n) const
@@ -495,12 +495,12 @@ namespace ft
 				while (_n < 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n > 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
@@ -509,12 +509,12 @@ namespace ft
 				while (_n > 0)
 				{
 					(*this)--;
-					n--;
+					_n--;
 				}
 				while (_n < 0)
 				{
 					(*this)++;
-					n++;
+					_n++;
 				}
 				return *this;
 			};
