@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 09:40:44 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 17:29:31 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/26 18:10:58 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ namespace ft
 					init_list();
 					assign(n, val);
 				};
-			template <class InputIterator>
-			List(InputIterator begin, InputIterator end, const alloc_type& alloc = alloc_type()) :
+			//template <class InputIterator>
+			List(iterator begin, iterator end, const alloc_type& alloc = alloc_type()) :
 				lst_head(0), lst_tail(0), _allocator(alloc), len(0)
 				{
 					init_list();
@@ -474,4 +474,5 @@ namespace ft
 		return (!(a < b));
 	};
 }
+
 #endif

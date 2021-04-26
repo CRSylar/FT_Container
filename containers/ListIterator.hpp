@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:25:24 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 17:01:42 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/26 18:07:55 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ namespace ft
 				*this = src;
 			};
 			ListIterator(Node_ptr _ptr)	: ptr(_ptr) {};
-			~ListIterator(void)	{};
+			virtual ~ListIterator(void)	{};
 			Node_ptr	node(void) const
 			{
 				return ptr;
@@ -152,7 +152,7 @@ namespace ft
 			typedef Node<T>*	Node_ptr;
 
 		protected:
-			Node_ptr	ptr;
+			const Node_ptr	ptr;
 
 		public:
 			ConstListIterator(void)	{};
