@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:25:24 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 11:52:50 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/26 12:16:24 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,9 +269,257 @@ namespace ft
 				return *this;
 			};
 	};
+	template<class T>
+	class ReverseListIterator
+	{
+		public:
+			typedef	T			val_type;
+			typedef T&			val_ref;
+			typedef Node<T>*	Node_ptr;
 
+		protected:
+			Node_ptr	ptr;
 
+		private:
+			ReverseListIterator(void)	{};
+			ReverseListIterator(const ReverseListIterator& src)
+			{
+				*this = src;
+			};
+			ReverseListIterator(Node_ptr _ptr)	: ptr(_ptr) {};
+			~ReverseListIterator(void)	{};
+			Node_ptr	node(void) const
+			{
+				return ptr;
+			};
+			ReverseListIterator&	operator=(const ReverseListIterator& _it)
+			{
+				ptr = _it.ptr;
+				return *this;
+			};
+			ReverseListIterator&	operator++(void)
+			{
+				ptr = ptr->next;
+				return *this;
+			};
+			ReverseListIterator	operator++(int _n)
+			{
+				(void)_n;
+				ReverseListIterator ret(*this);
+				ptr = ptr->next;
+				return ret;
+			};
+			ReverseListIterator&	operator--(void)
+			{
+				ptr = ptr->prev
+				return *this;
+			};
+			ReverseListIterator	operator--(int _n)
+			{
+				(void)_n;
+				ReverseListIterator ret(*this);
+				ptr = ptr->prev;
+				return ret;
+			};
+			bool	operator==(const ReverseListIterator& _it) const
+			{
+				return (ptr == _it.ptr);
+			};
+			bool	operator!=(const ReverseListIterator& _it) const
+			{
+				return (ptr != _it.ptr);
+			};
+			bool	operator>(const ReverseListIterator& _it) const
+			{
+				return (ptr > _it.ptr);
+			};
+			bool	operator<(const ReverseListIterator& _it) const
+			{
+				return (ptr < _it.ptr);
+			};
+			bool	operator<=(const ReverseListIterator& _it) const
+			{
+				return (ptr <= _it.ptr);
+			};
+			bool	operator>=(const ReverseListIterator& _it) const
+			{
+				return (ptr >= _it.ptr);
+			};
+			val_type&	operator*(void)
+			{
+				return ptr->data;
+			};
+			val_type*	operator->(void)
+			{
+				return ptr->data;
+			};
+			ReverseListIterator	operator+(int _n) const
+			{
+				ReverseListIterator ret(*this);
+				ret += n;
+				return ret;
+			};
+			ReverseListIterator	operator-(int _n) const
+			{
+				ReverseListIterator ret(*this);
+				ret -= n;
+				return ret;
+			};
+			ReverseListIterator&	operator+=(int _n) const
+			{
+				while (_n < 0)
+				{
+					(*this)--;
+					n--;
+				}
+				while (_n > 0)
+				{
+					(*this)++;
+					n++;
+				}
+				return *this;
+			};
+			ReverseListIterator&	operator-=(int _n) const
+			{
+				while (_n > 0)
+				{
+					(*this)--;
+					n--;
+				}
+				while (_n < 0)
+				{
+					(*this)++;
+					n++;
+				}
+				return *this;
+			};
+	};
+
+		template<class T>
+	class ConstReverseListIterator
+	{
+		public:
+			typedef	T			val_type;
+			typedef T&			val_ref;
+			typedef Node<T>*	Node_ptr;
+
+		protected:
+			Node_ptr	ptr;
+
+		private:
+			ConstReverseListIterator(void)	{};
+			ConstReverseListIterator(const ConstReverseListIterator& src)
+			{
+				*this = src;
+			};
+			ConstReverseListIterator(Node_ptr _ptr)	: ptr(_ptr) {};
+			~ConstReverseListIterator(void)	{};
+			Node_ptr	node(void) const
+			{
+				return ptr;
+			};
+			ConstReverseListIterator&	operator=(const ConstReverseListIterator& _it)
+			{
+				ptr = _it.ptr;
+				return *this;
+			};
+			ConstReverseListIterator&	operator++(void)
+			{
+				ptr = ptr->next;
+				return *this;
+			};
+			ConstReverseListIterator	operator++(int _n)
+			{
+				(void)_n;
+				ConstReverseListIterator ret(*this);
+				ptr = ptr->next;
+				return ret;
+			};
+			ConstReverseListIterator&	operator--(void)
+			{
+				ptr = ptr->prev
+				return *this;
+			};
+			ConstReverseListIterator	operator--(int _n)
+			{
+				(void)_n;
+				ConstReverseListIterator ret(*this);
+				ptr = ptr->prev;
+				return ret;
+			};
+			bool	operator==(const ConstReverseListIterator& _it) const
+			{
+				return (ptr == _it.ptr);
+			};
+			bool	operator!=(const ConstReverseListIterator& _it) const
+			{
+				return (ptr != _it.ptr);
+			};
+			bool	operator>(const ConstReverseListIterator& _it) const
+			{
+				return (ptr > _it.ptr);
+			};
+			bool	operator<(const ConstReverseListIterator& _it) const
+			{
+				return (ptr < _it.ptr);
+			};
+			bool	operator<=(const ConstReverseListIterator& _it) const
+			{
+				return (ptr <= _it.ptr);
+			};
+			bool	operator>=(const ConstReverseListIterator& _it) const
+			{
+				return (ptr >= _it.ptr);
+			};
+			val_type&	operator*(void)
+			{
+				return ptr->data;
+			};
+			val_type*	operator->(void)
+			{
+				return ptr->data;
+			};
+			ConstReverseListIterator	operator+(int _n) const
+			{
+				ConstReverseListIterator ret(*this);
+				ret += n;
+				return ret;
+			};
+			ConstReverseListIterator	operator-(int _n) const
+			{
+				ConstReverseListIterator ret(*this);
+				ret -= n;
+				return ret;
+			};
+			ConstReverseListIterator&	operator+=(int _n) const
+			{
+				while (_n < 0)
+				{
+					(*this)--;
+					n--;
+				}
+				while (_n > 0)
+				{
+					(*this)++;
+					n++;
+				}
+				return *this;
+			};
+			ConstReverseListIterator&	operator-=(int _n) const
+			{
+				while (_n > 0)
+				{
+					(*this)--;
+					n--;
+				}
+				while (_n < 0)
+				{
+					(*this)++;
+					n++;
+				}
+				return *this;
+			};
+	};
 }
-
 
 #endif
