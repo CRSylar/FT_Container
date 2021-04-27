@@ -159,16 +159,16 @@ static void front_back(void)
 
 static void assign(void)
 {
-/* 	print_header("Assign");
+	print_header("Assign");
 	std::string test[] = {"Hey", "what's", "up", "?"};
 	ft::Vector<std::string> v1;
 	std::vector<std::string> v2;
-	v1.assign(test, test + 4);
-	v2.assign(test, test + 4);
+	v1.assign(test, test + 3);
+	v2.assign(test, test + 3);
 	check("v1 == v2", v1 == v2);
 	v1.assign(10, "?");
 	v2.assign(10, "?");
-	check("v1 == v2", v1 == v2); */
+	check("v1 == v2", v1 == v2);
 }
 
 static void insert(void)
@@ -274,12 +274,12 @@ void	test_vector(void)
 {
 	print_header("Vector");
 
-	default_constructor();
+/* 	default_constructor();
 	copy_constructor();
 	max_size();
 	resize();
 	access_operator();
-	front_back();
+	front_back(); */
 	assign();
 	insert();
 	erase();

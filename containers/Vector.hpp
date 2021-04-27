@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:50:37 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/27 12:44:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/27 17:15:33 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ namespace ft
 			void	push_back(const val_type& val)
 			{
 				if (vec_len + 1 > vec_size)
-					reserve(vec_len + 1);
+					reserve((vec_size == 0) ? 1 : vec_size * 2);
 				vec[vec_len] = val;
 				vec_len++;
 			}
@@ -162,9 +162,9 @@ namespace ft
 				while (it + i != pos && i < vec_len)
 					i++;
 				if (vec_size < vec_len + 1)
-					reserve (vec_len + 1);
+					reserve (vec_size * 2);
 				size_type j = vec_size - 1;
-				while (j > 1)
+				while (j > i)
 				{
 					vec[j] = vec[j - 1];
 					j--;
@@ -212,7 +212,7 @@ namespace ft
 					it++;
 				}
 				vec_len--;
-				return iterator(pos);
+				return (iterator(pos));
 			}
 			iterator	erase(iterator start, iterator end)
 			{
@@ -230,13 +230,21 @@ namespace ft
 			template <class InputIterator>
 			void	assign(InputIterator start, InputIterator end)
 			{
-				clear();
-				insert(begin(), start, end);
+				clear()
+				while (start != end)
+				{
+					push_back(*start);
+					start++;
+				}
 			}
 			void	assign(size_type n, const val_type& val)
 			{
 				clear();
-				insert(begin(), n, val);
+				while (n)
+				{
+					push_back(val);
+					n--;
+				}
 			}
 			val_ref		front(void)
 			{
@@ -303,9 +311,9 @@ namespace ft
 		size_t	j = 0;
 
 		if (a.size() > b.size())
-			j = b.size();
+			j = b.size() - 1;
 		else
-			j = a.size();
+			j = a.size() - 1;
 		while (i < j)
 		{
 			if (a.at(i) != b.at(i))
