@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:26:46 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/26 11:29:57 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/27 10:01:01 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft
 	{
 		T tmp = a;
 		a = b;
-		tmp = b;
+		b = tmp;
 	};
 
 	template<class T>
