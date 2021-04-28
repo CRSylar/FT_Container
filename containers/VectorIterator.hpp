@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 10:04:31 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/27 12:29:26 by cromalde         ###   ########.fr       */
+/*   Created: 2021/04/28 10:42:32 by cromalde          #+#    #+#             */
+/*   Updated: 2021/04/28 10:42:35 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,98 +15,99 @@
 
 namespace ft
 {
-
 	template <class T>
 	class VectorIterator
 	{
 		public:
-			typedef T	val_type;
-			typedef	T&	val_ref;
-			typedef	T*	val_ptr;
-
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
 		protected:
-			val_ptr	ptr;
-
+			pointer _ptr;
 		public:
-			VectorIterator(void)	{};
-			VectorIterator(const VectorIterator& src)
+			 VectorIterator(void)
+			{};
+			 VectorIterator(const VectorIterator &other)
 			{
-				*this = src;
-			}
-			VectorIterator(val_ptr _ptr) : ptr(_ptr) {}
-			~VectorIterator(void)	{}
-			VectorIterator&		operator=(const VectorIterator& src)
+				*this = other;
+			};
+			 VectorIterator(pointer ptr)
+			: _ptr(ptr)
+			{};
+			 ~VectorIterator(void)
+			{};
+			VectorIterator &operator=(const VectorIterator &other)
 			{
-				ptr = src.ptr;
-				return *this;
-			}
-			VectorIterator&		operator++(void)
+				_ptr = other._ptr;
+				return (*this);
+			};
+			VectorIterator &operator++(void)
 			{
-				ptr++;
-				return *this;
-			}
-			VectorIterator&		operator--(void)
+				_ptr++;
+				return (*this);
+			};
+			VectorIterator &operator--(void)
 			{
-				ptr--;
-				return *this;
-			}
-			VectorIterator		operator++(int)
+				_ptr--;
+				return (*this);
+			};
+			VectorIterator operator++(int)
 			{
 				VectorIterator tmp(*this);
 				operator++();
-				return tmp;
-			}
-			VectorIterator		operator--(int)
+				return (tmp);
+			};
+			VectorIterator operator--(int)
 			{
-				VectorIterator	tmp(*this);
+				VectorIterator tmp(*this);
 				operator--();
-				return tmp;
-			}
-			bool	operator==(const VectorIterator& vec) const
+				return (tmp);
+			};
+			bool operator==(const VectorIterator &other) const
 			{
-				return (ptr == vec.ptr);
-			}
-			bool	operator!=(const VectorIterator& vec) const
+				return (_ptr == other._ptr);
+			};
+			bool operator!=(const VectorIterator &other) const
 			{
-				return (ptr != vec.ptr);
-			}
-			bool	operator<(const VectorIterator& vec) const
+				return (_ptr != other._ptr);
+			};
+			bool operator>(const VectorIterator &other) const
 			{
-				return (ptr < vec.ptr);
-			}
-			bool	operator>(const VectorIterator& vec) const
+				return (_ptr > other._ptr);
+			};
+			bool operator>=(const VectorIterator &other) const
 			{
-				return (ptr > vec.ptr);
-			}
-			bool	operator<=(const VectorIterator& vec) const
+				return (_ptr >= other._ptr);
+			};
+			bool operator<(const VectorIterator &other) const
 			{
-				return (ptr <= vec.ptr);
-			}
-			bool	operator>=(const VectorIterator& vec) const
+				return (_ptr < other._ptr);
+			};
+			bool operator<=(const VectorIterator &other) const
 			{
-				return (ptr >= vec.ptr);
-			}
-			val_type&	operator*(void)
+				return (_ptr <= other._ptr);
+			};
+			value_type &operator*(void)
 			{
-				return (*ptr);
-			}
-			val_type*	operator->(void)
+				return (*_ptr);
+			};
+			value_type *operator->(void)
 			{
-				return ptr;
-			}
-			VectorIterator	operator+(int n) const
+				return (_ptr);
+			};
+			VectorIterator operator+(int n) const
 			{
 				VectorIterator tmp(*this);
 				tmp += n;
-				return tmp;
-			}
-			VectorIterator	operator-(int n) const
+				return (tmp);
+			};
+			VectorIterator operator-(int n) const
 			{
 				VectorIterator tmp(*this);
 				tmp -= n;
-				return tmp;
-			}
-			VectorIterator&	operator+=(int n)
+				return (tmp);
+			};
+			VectorIterator &operator+=(int n)
 			{
 				while (n < 0)
 				{
@@ -119,213 +120,215 @@ namespace ft
 					n--;
 				}
 				return (*this);
-			}
-			VectorIterator&	operator-=(int n)
+			};
+			VectorIterator &operator-=(int n)
 			{
-				while (n < 0)
-				{
-					(*this)++;
-					n++;
-				}
 				while (n > 0)
 				{
-					(*this)--;
+					operator--();
 					n--;
 				}
-				return *this;
-			}
-			val_type&	operator[](int n) const
+				while (n < 0)
+				{
+					operator++();
+					n++;
+				}
+				return (*this);
+			};
+			value_type &operator[](int n) const
 			{
 				return (*(*this + n));
 			}
 	};
-
 	template <class T>
-	class ReverseVectorIterator
+	class ReverseVectorIterator : public VectorIterator<T>
 	{
 		public:
-			typedef T	val_type;
-			typedef	T&	val_ref;
-			typedef	T*	val_ptr;
-
-		protected:
-			val_ptr	ptr;
-
-		public:
-			ReverseVectorIterator(void)	{};
-			ReverseVectorIterator(const ReverseVectorIterator& src)
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+			ReverseVectorIterator(void)
+			{};
+			ReverseVectorIterator(const ReverseVectorIterator &other)
 			{
-				*this = src;
-			}
-			ReverseVectorIterator(val_ptr _ptr) : ptr(_ptr) {}
-			~ReverseVectorIterator(void)	{}
-			ReverseVectorIterator&		operator=(const ReverseVectorIterator& src)
+				*this = other;
+			};
+			ReverseVectorIterator(pointer ptr)
 			{
-				ptr = src.ptr;
-				return *this;
-			}
-			ReverseVectorIterator&		operator++(void)
+				this->_ptr = ptr;
+			};
+			~ReverseVectorIterator(void)
+			{};
+			ReverseVectorIterator &operator=(const ReverseVectorIterator &other)
 			{
-				ptr--;
-				return *this;
-			}
-			ReverseVectorIterator&		operator--(void)
+				this->_ptr = other._ptr;
+				return (*this);
+			};
+			ReverseVectorIterator &operator++(void)
 			{
-				ptr++;
-				return *this;
-			}
-			ReverseVectorIterator		operator++(int)
+				this->_ptr--;
+				return (*this);
+			};
+			ReverseVectorIterator operator++(int)
 			{
 				ReverseVectorIterator tmp(*this);
-				operator--();
-				return tmp;
-			}
-			ReverseVectorIterator		operator--(int)
+				this->_ptr--;
+				return (tmp);
+			};
+			ReverseVectorIterator &operator--(void)
 			{
-				ReverseVectorIterator	tmp(*this);
-				operator++();
-				return tmp;
-			}
-			bool	operator==(const ReverseVectorIterator& vec) const
+				this->_ptr++;
+				return (*this);
+			};
+			ReverseVectorIterator operator--(int)
 			{
-				return (ptr == vec.ptr);
-			}
-			bool	operator!=(const ReverseVectorIterator& vec) const
+				ReverseVectorIterator tmp(*this);
+				tmp._ptr++;
+				rteurn (tmp);
+			};
+			ReverseVectorIterator operator+=(int n)
 			{
-				return (ptr != vec.ptr);
-			}
-			bool	operator<(const ReverseVectorIterator& vec) const
+				while (n > 0)
+				{
+					operator++();
+					n--;
+				}
+				while (n < 0)
+				{
+					operator--();
+					n++;
+				}
+				return (*this);
+			};
+			ReverseVectorIterator operator-=(int n)
 			{
-				return (ptr < vec.ptr);
-			}
-			bool	operator>(const ReverseVectorIterator& vec) const
+				while (n > 0)
+				{
+					operator--();
+					n--;
+				}
+				while (n < 0)
+				{
+					operator++();
+					n++;
+				}
+				return (*this);
+			};
+			bool operator==(const ReverseVectorIterator &other) const
 			{
-				return (ptr > vec.ptr);
-			}
-			bool	operator<=(const ReverseVectorIterator& vec) const
+				return (this->_ptr == other._ptr);
+			};
+			bool operator!=(const ReverseVectorIterator &other) const
 			{
-				return (ptr <= vec.ptr);
-			}
-			bool	operator>=(const ReverseVectorIterator& vec) const
+				return (this->_ptr != other._ptr);
+			};
+			bool operator>(const ReverseVectorIterator &other) const
 			{
-				return (ptr >= vec.ptr);
-			}
-			val_type&	operator*(void)
+				return (this->_ptr > other._ptr);
+			};
+			bool operator>=(const ReverseVectorIterator &other) const
 			{
-				return (ptr);
-			}
-			val_type*	operator->(void)
+				return (this->_ptr >= other._ptr);
+			};
+			bool operator<(const ReverseVectorIterator &other) const
 			{
-				return ptr;
-			}
-			ReverseVectorIterator	operator+(int n) const
+				return (this->_ptr < other._ptr);
+			};
+			bool operator<=(const ReverseVectorIterator &other) const
+			{
+				return (this->_ptr <= other._ptr);
+			};
+			value_type &operator*(void)
+			{
+				return (*this->_ptr);
+			};
+			value_type *operator->(void)
+			{
+				return (this->_ptr);
+			};
+			ReverseVectorIterator operator+(int n) const
 			{
 				ReverseVectorIterator tmp(*this);
 				tmp += n;
-				return tmp;
-			}
-			ReverseVectorIterator	operator-(int n) const
+				return (tmp);
+			};
+			ReverseVectorIterator operator-(int n) const
 			{
 				ReverseVectorIterator tmp(*this);
 				tmp -= n;
-				return tmp;
-			}
-			ReverseVectorIterator&	operator+=(int n)
+				return (tmp);
+			};
+			value_type &operator[](int n) const
 			{
-				while (n < 0)
-				{
-					(*this)--;
-					n++;
-				}
-				while (n > 0)
-				{
-					(*this)++;
-					n--;
-				}
-				return (*this);
-			}
-			ReverseVectorIterator&	operator-=(int n)
-			{
-				while (n < 0)
-				{
-					(*this)++;
-					n++;
-				}
-				while (n > 0)
-				{
-					(*this)--;
-					n--;
-				}
-				return *this;
-			}
-			val_type&	operator[](int n) const
-			{
+				std::cout << "eeeeee" << std::endl;
 				return (*(*this - n));
-			}
+			};
 	};
-
 	template <class T>
 	class ConstVectorIterator : public VectorIterator<T>
 	{
 		public:
-			typedef T	val_type;
-			typedef T&	val_ref;
-			typedef	T*	val_ptr;
-			ConstVectorIterator(void) {}
-			ConstVectorIterator(val_ptr _ptr)
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+			ConstVectorIterator(void)
+			{};
+			ConstVectorIterator(pointer ptr)
 			{
-				this->ptr = _ptr;
-			}
-			ConstVectorIterator(const ConstVectorIterator& src)
+				this->_ptr = ptr;
+			};
+			ConstVectorIterator(const ConstVectorIterator &other)
 			{
-				*this = src;
-			}
-			~ConstVectorIterator(void)	{}
-			ConstVectorIterator&	operator=(const ConstVectorIterator& vec)
+				*this = other;
+			};
+			~ConstVectorIterator(void)
+			{};
+			ConstVectorIterator &operator=(const ConstVectorIterator &other)
 			{
-				this->ptr = vec.ptr;
-				return *this;
-			}
-			const	val_type&	operator*(void)
+				this->_ptr = other._ptr;
+				return (*this);
+			};
+			const value_type &operator*(void)
 			{
-				return *this->ptr;
-			}
-			const	val_type&	operator[](int n) const
+				return (*this->_ptr);
+			};
+			const value_type &operator[](int n) const
 			{
-				return (*(this + n));
+				return (*(*this + n));
 			}
 	};
-
 	template <class T>
 	class ConstReverseVectorIterator : public ReverseVectorIterator<T>
 	{
 		public:
-			typedef T	val_type;
-			typedef T&	val_ref;
-			typedef	T*	val_ptr;
-			ConstReverseVectorIterator(void) {}
-			ConstReverseVectorIterator(val_ptr _ptr)
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+			ConstReverseVectorIterator(void)
+			{};
+			ConstReverseVectorIterator(pointer ptr)
 			{
-				this->ptr = _ptr;
-			}
-			ConstReverseVectorIterator(const ConstReverseVectorIterator& vec)
+				this->_ptr = ptr;
+			};
+			ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
 			{
-				*this = vec;
-			}
-			~ConstReverseVectorIterator(void)	{}
-			ConstReverseVectorIterator&	operator=(const ConstReverseVectorIterator& vec)
+				*this = other;
+			};
+			~ConstReverseVectorIterator(void)
+			{};
+			ConstReverseVectorIterator &operator=(const ConstReverseVectorIterator &other)
 			{
-				this->ptr = vec.ptr;
-				return *this;
+				this->_ptr = other._ptr;
+				return (*this);
+			};
+			const value_type &operator*(void)
+			{
+				return (*this->_ptr);
+			};
+			const value_type &operator[](int n) const
+			{
+				return (*(*this - n));
 			}
-		const val_type&	operator*(void)
-		{
-			return (*this->ptr);
-		}
-		const val_type&	operator[](int n) const
-		{
-			return (*(*this - n));
-		}
 	};
 };
 
