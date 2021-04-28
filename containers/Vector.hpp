@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 11:16:43 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/28 12:04:15 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/28 12:42:55 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ namespace ft
 			};
 			~Vector(void)
 			{
+				clear();
 				_allocator.deallocate(_container, _container_size);
 			};
 			Vector &operator=(const Vector &other)
