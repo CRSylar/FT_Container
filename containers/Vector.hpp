@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 11:16:43 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/28 12:42:55 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/28 17:02:59 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ namespace ft
 				if (_container != 0)
 					_allocator.deallocate(_container, _container_size);
 				_allocator = other._allocator;
-				_container_size = 0;
-				_container_length = 0;
-				_container = _allocator.allocate(0);
+				_container_size = other._container_size;
+				_container_length = other._container_length;
+				_container = _allocator.allocate(_container_size);
 				assign(other.begin(), other.end());
 				return (*this);
 			};
@@ -125,14 +125,9 @@ namespace ft
 			{
 				if (n > _container_size)
 				{
-					size_type i = 0;
-					pointer	tmp;
-					tmp  = _allocator.allocate(n);
-					while (i <= _container_length)
-					{
+					pointer	tmp = _allocator.allocate(n);
+					for (size_type i = 0; i < _container_length; i++)
 						tmp[i] = _container[i];
-						i++;
-					}
 					_allocator.deallocate(_container, _container_size);
 					_container_size = n;
 					_container = tmp;
@@ -140,8 +135,8 @@ namespace ft
 			};
 			void push_back(const value_type &value)
 			{
-				if (_container_length == _container_size)
-					reserve((_container_size == 0) ? 1 : _container_size * 2);
+				if (_container_size < _container_length + 1)
+					reserve(_container_size + 1);
 				_container[_container_length++] = value;
 			};
 			size_type size(void) const
@@ -162,8 +157,8 @@ namespace ft
 				iterator it = begin();
 				while (it + i != position && i < _container_length)
 					i++;
-				if (_container_size == _container_length)
-					reserve((_container_size == 0) ? 1 : _container_size * 2);
+				if (_container_size < _container_length + 1)
+					reserve(_container_size + 1);
 				size_type j = _container_size - 1;
 				while (j > i)
 				{
