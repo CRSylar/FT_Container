@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/28 10:42:52 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/28 10:42:55 by cromalde         ###   ########.fr       */
+/*   Created: 2021/04/28 11:16:43 by cromalde          #+#    #+#             */
+/*   Updated: 2021/04/28 12:04:15 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,20 +124,23 @@ namespace ft
 			{
 				if (n > _container_size)
 				{
-					size_type i = -1;
+					size_type i = 0;
 					pointer	tmp;
 					tmp  = _allocator.allocate(n);
-					_container_size = n;
-					while (++i < _container_length)
+					while (i <= _container_length)
+					{
 						tmp[i] = _container[i];
+						i++;
+					}
 					_allocator.deallocate(_container, _container_size);
+					_container_size = n;
 					_container = tmp;
 				}
 			};
 			void push_back(const value_type &value)
 			{
-				if (_container_length + 1 > _container_size)
-					reserve(_container_length + 1);
+				if (_container_length == _container_size)
+					reserve((_container_size == 0) ? 1 : _container_size * 2);
 				_container[_container_length++] = value;
 			};
 			size_type size(void) const
@@ -158,8 +161,8 @@ namespace ft
 				iterator it = begin();
 				while (it + i != position && i < _container_length)
 					i++;
-				if (_container_size < _container_length + 1)
-					reserve(_container_length + 1);
+				if (_container_size == _container_length)
+					reserve((_container_size == 0) ? 1 : _container_size * 2);
 				size_type j = _container_size - 1;
 				while (j > i)
 				{
