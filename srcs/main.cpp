@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:08:14 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 15:09:44 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 15:21:27 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		main(int ac, char **av)
 		testVector();
 		testList();
 		testStack();
-//		testQueue();
+		testQueue();
 		/*testMap();
 		if (testname == "bonus")
 			testDequeue();
@@ -42,9 +42,9 @@ int		main(int ac, char **av)
 		testList();
 	else if (testname == "stack")
 		testStack();
-/*	else if (testname == "queue")
+	else if (testname == "queue")
 		testQueue();
-	else if (testname == "map")
-		testMap(); */
+//	else if (testname == "map")
+//		testMap();
 
 }
