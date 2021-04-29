@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:17:39 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 11:19:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 14:18:44 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define FAIL "❌"
 
 # define CYAN	"\x1B[36m"
+# define MAG	"\x1B[35m"
 # define RED	"\x1B[31m"
 # define GRN	"\x1B[32m"
 # define NC		"\033[0m"

@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 13:28:28 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 14:24:39 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,15 +225,33 @@ void	test_insert(void)
 
 void	test_erase(void)
 {
-	ft::Vector<std::string> myvec(3, "test");
-	std::vector<std::string> revec(3, "test");
+	ft::Vector<std::string> myvec;
+	std::vector<std::string> revec;
 
 	print_header("Erase");
+
+	myvec.push_back("da eliminare");
+	revec.push_back("da eliminare");
+	myvec.push_back("test");
+	revec.push_back("test");
 	myvec.push_back("prova");
 	revec.push_back("prova");
+	std::cout << MAG;
+	for (ft::Vector<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
+		std::cout << *it << " - ";
+	std::cout << std::endl;
+	for (std::vector<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
+		std::cout << *it << " - ";
+	std::cout << std::endl;
 	myvec.erase(myvec.begin());
 	revec.erase(revec.begin());
-
+	for (ft::Vector<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
+		std::cout << *it << " - ";
+	std::cout << std::endl;
+	for (std::vector<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
+		std::cout << *it << " - ";
+	std::cout << std::endl;
+	std::cout << NC;
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
@@ -271,6 +289,43 @@ void	test_swap(void)
 		std::cout << "myswap == reswap	" << RED << FAIL << NC << std::endl;
 }
 
+void	test_operators(void)
+{
+	print_header("Operators");
+	ft::Vector<int> v1;
+	std::vector<int> v2;
+	ft::Vector<int> v3;
+	std::vector<int> v4;
+
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v2.push_back(1);
+	v2.push_back(2);
+	v2.push_back(3);
+	v3 = v1;
+	v4 = v2;
+	if (v1 == v3)
+		std::cout << "v1 == v3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "v1 == v3		" << RED << FAIL << NC << std::endl;
+	v3.push_back(42);
+	if (v1 != v3)
+		std::cout << "v1 != v3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "v1 != v3		" << RED << FAIL << NC << std::endl;
+
+	if (v3 >= v1)
+		std::cout << "v1 >= v3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "v1 >= v3		" << RED << FAIL << NC << std::endl;
+
+	if (v1 <= v3)
+		std::cout << "v1 <= v3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "v1 <= v3		" << RED << FAIL << NC << std::endl;
+}
+
 void	testVector(void)
 {
 	print_header("");
@@ -285,5 +340,5 @@ void	testVector(void)
 	test_insert();
 	test_erase();
 	test_swap();
-//	test_operators();
+	test_operators();
 }
