@@ -6,7 +6,7 @@
 #    By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 09:01:51 by cromalde          #+#    #+#              #
-#    Updated: 2021/04/29 14:38:00 by cromalde         ###   ########.fr        #
+#    Updated: 2021/04/29 15:09:56 by cromalde         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@
 NAME	=	tester
 SRCS	=	./srcs/main.cpp \
 			./srcs/Vector.cpp \
-			./srcs/List.cpp
+			./srcs/List.cpp \
+			./srcs/Stack.cpp
 #			./srcs/Queue.cpp
-#			./srcs/Stack.cpp
 
 OBJ		= $(SRCS:.cpp=.o)
 

@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 14:40:58 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 15:11:13 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static void	print_header(std::string _test)
 {
 	if (_test == "")
 	{
-		std::cout << CYAN << "**************************************" << std::endl;
+		std::cout << MAG << "**************************************" << std::endl;
 		std::cout << "*	  Testing Lists	  *" << std::endl;
-		std::cout << CYAN << "**************************************" << NC << std::endl;
+		std::cout << MAG << "**************************************" << NC << std::endl;
 	}
 	else
 	{
@@ -296,6 +296,147 @@ static void	test_reverse(void)
 		std::cout << "v1 <= v3		" << RED << FAIL << NC << std::endl;
 }
 
+static void	test_splice(void)
+{
+	print_header("Splice");
+	ft::List<int> l1((size_t)10, 5);
+	std::list<int> l2((size_t)10, 5);
+	ft::List<int> l3((size_t)3, 0);
+	std::list<int> l4((size_t)3, 0);
+	l1.splice(++l1.begin(), l3);
+	l2.splice(++l2.begin(), l4);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	if (l3 == l4)
+		std::cout << "l1 == l3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l3		" << RED << FAIL << NC << std::endl;
+	l1.assign((size_t)10, 5);
+	l2.assign((size_t)10, 5);
+	l3.assign((size_t)3, 0);
+	l4.assign((size_t)3, 0);
+	l1.splice(l1.begin(), l3, ++l3.begin());
+	l2.splice(l2.begin(), l4, ++l4.begin());
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	if (l3 == l4)
+		std::cout << "l1 == l3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l3		" << RED << FAIL << NC << std::endl;
+	l1.assign((size_t)10, 5);
+	l2.assign((size_t)10, 5);
+	l3.assign((size_t)3, 0);
+	l4.assign((size_t)3, 0);
+	l1.splice(l1.begin(), l3, ++l3.begin(), --l3.end());
+	l2.splice(l2.begin(), l4, ++l4.begin(), --l4.end());
+	if (l1 == l2)
+		std::cout << "l1 == l3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l3		" << RED << FAIL << NC << std::endl;
+	if (l3 == l4)
+		std::cout << "l1 == l3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l3		" << RED << FAIL << NC << std::endl;
+}
+
+static bool even(const int& value)
+{
+	return (value % 2) == 0;
+}
+
+static void		test_remove(void)
+{
+	print_header("Remove / Remove if");
+	int test[] = {0, 0, 0, 1, 2, 0, 5, 3, 4, 5, 1, -1, 0, 1};
+	ft::List<int> l1(test, test + 14);
+	std::list<int> l2(test, test + 14);
+	l1.remove(0);
+	l1.remove(5);
+	l2.remove(0);
+	l2.remove(5);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	l1.remove_if(even);
+	l2.remove_if(even);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+}
+
+static bool compare2(int a, int b)
+{
+	return (a == b);
+}
+static void test_merge(void)
+{
+	print_header("Merge");
+	int test[] = {1, 2, 3};
+	int test2[] = {42, 43, 44};
+	ft::List<int> l1(test, test + 3);
+	std::list<int> l2(test, test + 3);
+	ft::List<int> l3(test2, test2 + 3);
+	std::list<int> l4(test2, test2 + 3);
+	l1.merge(l3);
+	l2.merge(l4);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	if (l3 == l4)
+		std::cout << "l3 == l4		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l3 == l4		" << RED << FAIL << NC << std::endl;
+	l1.assign(test, test + 3);
+	l2.assign(test, test + 3);
+	l3.assign(test2, test2 + 3);
+	l4.assign(test2, test2 + 3);
+	l1.merge(l3, compare2);
+	l2.merge(l4, compare2);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	if (l3 == l4)
+		std::cout << "l3 == l4		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l3 == l4		" << RED << FAIL << NC << std::endl;
+}
+
+static bool compare(int a, int b)
+{
+	return (a >= b);
+}
+
+static void test_unique()
+{
+	print_header("Unique");
+	int test[] = {0, 0, 0, 1, 2, 0, 5, 3, 4, 5, 1, -1, 0, 1};
+	ft::List<int> l1(test, test + 14);
+	std::list<int> l2(test, test + 14);
+	l1.unique();
+	l2.unique();
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+	l1.assign(test, test + 14);
+	l2.assign(test, test + 14);
+	l1.unique(compare);
+	l2.unique(compare);
+	if (l1 == l2)
+		std::cout << "l1 == l2		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "l1 == l2		" << RED << FAIL << NC << std::endl;
+}
+
+
 void	testList(void)
 {
 	std::srand(time(0));
@@ -310,7 +451,11 @@ void	testList(void)
 	test_insert();
 	test_erase();
 	test_swap();
+	test_splice();
 	test_reverse();
+	test_remove();
+	test_merge();
+	test_unique();
 	test_operators();
 
 	print_header(" END ");
