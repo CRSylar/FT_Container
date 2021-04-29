@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Vector.cpp                                         :+:      :+:    :+:   */
+/*   List.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 14:40:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 14:40:58 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	print_header(std::string _test)
 	if (_test == "")
 	{
 		std::cout << CYAN << "**************************************" << std::endl;
-		std::cout << "*	  Testing Vectors	  *" << std::endl;
+		std::cout << "*	  Testing Lists	  *" << std::endl;
 		std::cout << CYAN << "**************************************" << NC << std::endl;
 	}
 	else
@@ -30,8 +30,8 @@ static void	print_header(std::string _test)
 
 static void	test_constructor(void)
 {
-	ft::Vector<int> myvec;
-	std::vector<int> revec;
+	ft::List<int> myvec;
+	std::list<int> revec;
 
 	print_header("Constructor");
 	if (myvec == revec)
@@ -53,8 +53,8 @@ static void	test_constructor(void)
 
 static void	test_copy_constructor(void)
 {
-	ft::Vector<int> myvec;
-	std::vector<int> revec;
+	ft::List<int> myvec;
+	std::list<int> revec;
 
 	print_header("Copy_Constr");
 	myvec.push_back(1);
@@ -64,8 +64,8 @@ static void	test_copy_constructor(void)
 	revec.push_back(10);
 	revec.push_back(42);
 
-	ft::Vector<int> mycopy(myvec);
-	std::vector<int> recopy(revec);
+	ft::List<int> mycopy(myvec);
+	std::list<int> recopy(revec);
 
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
@@ -84,8 +84,8 @@ static void	test_copy_constructor(void)
 
 static void	test_max_size(void)
 {
-	ft::Vector<std::string> v1;
-	std::vector<std::string> v2;
+	ft::List<std::string> v1;
+	std::list<std::string> v2;
 
 	print_header("Max_size");
 	if (v1.max_size() == v2.max_size())
@@ -96,8 +96,8 @@ static void	test_max_size(void)
 
 static void	test_resize(void)
 {
-	ft::Vector<std::string> myvec;
-	std::vector<std::string> revec;
+	ft::List<std::string> myvec;
+	std::list<std::string> revec;
 
 	print_header("Resize");
 	myvec.resize(10, "test");
@@ -115,64 +115,20 @@ static void	test_resize(void)
 
 }
 
-static void	test_access_op(void)
-{
-	ft::Vector<int> myvec;
-	std::vector<int> revec;
-
-	print_header("[] operator & at()");
-	myvec.push_back(1);
-	revec.push_back(1);
-	myvec.push_back(10);
-	revec.push_back(10);
-	myvec.push_back(42);
-	revec.push_back(42);
-	myvec.push_back(14);
-	revec.push_back(14);
-	myvec.push_back(30);
-	revec.push_back(30);
-	for (int i = 0; i < 4; i++)
-	{
-		if (myvec[i] == revec[i])
-			std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
-		else
-			std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
-	}
-	for(int i = 100; i < 103; i++)
-	{
-		try
-		{
-			std::cout << myvec[i] << RED << FAIL << NC << std::endl;
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << ":" << std::string(10, ' ') << GRN << GOOD << NC << std::endl;
-		}
-	}
-	try
-	{
-		std::cout << myvec[-1] << RED << FAIL << NC << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << ":" << std::string(10, ' ') << GRN << GOOD << NC << std::endl;
-	}
-}
-
 static void	test_front_back(void)
 {
-	ft::Vector<int> myvec;
-	std::vector<int> revec;
+	ft::List<int> myvec;
+	std::list<int> revec;
 
 	print_header("Front & Back");
 	myvec.push_back(1);
 	revec.push_back(1);
 	myvec.push_back(10);
 	revec.push_back(10);
-	myvec.push_back(42);
-	revec.push_back(42);
-	myvec.push_back(14);
-	revec.push_back(14);
+	myvec.push_front(42);
+	revec.push_front(42);
+	myvec.push_front(14);
+	revec.push_front(14);
 	myvec.push_back(30);
 	revec.push_back(30);
 	if (myvec.front() == revec.front())
@@ -187,8 +143,8 @@ static void	test_front_back(void)
 
 static void	test_assign(void)
 {
-	ft::Vector<std::string> myvec;
-	std::vector<std::string> revec;
+	ft::List<std::string> myvec;
+	std::list<std::string> revec;
 
 	print_header("Assign");
 	myvec.push_back("2");
@@ -203,8 +159,8 @@ static void	test_assign(void)
 
 static void	test_insert(void)
 {
-	ft::Vector<std::string> myvec;
-	std::vector<std::string> revec;
+	ft::List<std::string> myvec;
+	std::list<std::string> revec;
 
 	print_header("Insert");
 	myvec.push_back("ciao");
@@ -225,8 +181,8 @@ static void	test_insert(void)
 
 static void	test_erase(void)
 {
-	ft::Vector<std::string> myvec;
-	std::vector<std::string> revec;
+	ft::List<std::string> myvec;
+	std::list<std::string> revec;
 
 	print_header("Erase");
 
@@ -237,18 +193,18 @@ static void	test_erase(void)
 	myvec.push_back("prova");
 	revec.push_back("prova");
 	std::cout << MAG;
-	for (ft::Vector<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
+	for (ft::List<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
 		std::cout << *it << " - ";
 	std::cout << std::endl;
-	for (std::vector<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
+	for (std::list<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
 		std::cout << *it << " - ";
 	std::cout << std::endl;
 	myvec.erase(myvec.begin());
 	revec.erase(revec.begin());
-	for (ft::Vector<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
+	for (ft::List<std::string>::iterator it = myvec.begin(); it != myvec.end(); it++)
 		std::cout << *it << " - ";
 	std::cout << std::endl;
-	for (std::vector<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
+	for (std::list<std::string>::iterator it = revec.begin(); it != revec.end(); it++)
 		std::cout << *it << " - ";
 	std::cout << std::endl;
 	std::cout << NC;
@@ -260,10 +216,10 @@ static void	test_erase(void)
 
 static void	test_swap(void)
 {
-	ft::Vector<int> myvec;
-	std::vector<int> revec;
-	ft::Vector<int> myswap;
-	std::vector<int> reswap;
+	ft::List<int> myvec;
+	std::list<int> revec;
+	ft::List<int> myswap;
+	std::list<int> reswap;
 
 	print_header("Swap");
 	myvec.push_back(1);
@@ -292,10 +248,10 @@ static void	test_swap(void)
 static void	test_operators(void)
 {
 	print_header("Operators");
-	ft::Vector<int> v1;
-	std::vector<int> v2;
-	ft::Vector<int> v3;
-	std::vector<int> v4;
+	ft::List<int> v1;
+	std::list<int> v2;
+	ft::List<int> v3;
+	std::list<int> v4;
 
 	v1.push_back(1);
 	v1.push_back(2);
@@ -326,20 +282,35 @@ static void	test_operators(void)
 		std::cout << "v1 <= v3		" << RED << FAIL << NC << std::endl;
 }
 
-void	testVector(void)
+static void	test_reverse(void)
 {
+	print_header("Reverse");
+	int test[] = {0,1, 2, 3, 4, 5, 6, 7, 8, 9, 42, 21};
+	ft::List<int> l1(test, test + 12);
+	std::list<int> l2(test, test + 12);
+	l1.reverse();
+	l2.reverse();
+	if (l1 == l2)
+		std::cout << "v1 <= v3		" << GRN << GOOD << NC << std::endl;
+	else
+		std::cout << "v1 <= v3		" << RED << FAIL << NC << std::endl;
+}
+
+void	testList(void)
+{
+	std::srand(time(0));
 	print_header("");
 
 	test_constructor();
 	test_copy_constructor();
 	test_max_size();
 	test_resize();
-	test_access_op();
 	test_front_back();
 	test_assign();
 	test_insert();
 	test_erase();
 	test_swap();
+	test_reverse();
 	test_operators();
 
 	print_header(" END ");
