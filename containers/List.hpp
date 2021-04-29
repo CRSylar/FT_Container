@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 09:40:44 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/27 10:01:32 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:24:10 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,137 +47,137 @@ namespace ft
 				node->prev = prev;
 				node->next = next;
 				return (node);
-			};
+			}
 			void _init_list(void)
 			{
 				_list_begin = _new_node(value_type(), 0, 0);
 				_list_end = _new_node(value_type(), _list_begin, 0);
 				_list_begin->next = _list_end;
-			};
+			}
 			template <typename N>
 			struct _Smaller {
 				bool operator()(const N &a, const N &b)
 				{
 					return a > b;
-				};
+				}
 			};
 			template <typename N>
 			struct _Equal {
 				bool operator()(const N &a, const N &b)
 				{
 					return a == b;
-				};
+				}
 			};
 		public:
 			explicit List(const allocator_type &alloc=allocator_type())
 			: _list_begin(0), _list_end(0), _allocator(alloc), _length(0)
 			{
 				_init_list();
-			};
+			}
 			explicit List(size_type n, const value_type &value = value_type(), const allocator_type &alloc=allocator_type())
 			: _list_begin(0), _list_end(0), _allocator(alloc), _length(0)
 			{
 				_init_list();
 				assign(n, value);
-			};
+			}
 			template <class InputIterator>
 			List(InputIterator first, InputIterator last, const allocator_type &alloc=allocator_type())
 			: _list_begin(0), _list_end(0), _allocator(alloc), _length(0)
 			{
 				_init_list();
 				assign(first, last);
-			};
+			}
 			List(const List &other)
 			: _list_begin(0), _list_end(0), _allocator(other._allocator), _length(0)
 			{
 				_init_list();
 				*this = other;
-			};
+			}
 			~List(void)
 			{
 					clear();
 					delete _list_begin;
 					delete _list_end;
-			};
+			}
 			List &operator=(const List &other)
 			{
 				clear();
 				assign(other.begin(), other.end());
 				_length = other._length;
 				return (*this);
-			};
+			}
 			iterator begin(void) {
 				return (iterator(_list_begin->next));
-			};
+			}
 			const_iterator begin(void) const {
 				return (const_iterator(_list_begin->next));
-			};
+			}
 			iterator end(void) {
 				return (iterator(_list_end));
-			};
+			}
 			const_iterator end(void) const {
 				return (const_iterator(_list_end));
-			};
+			}
 			reverse_iterator rbegin(void) {
 				return (reverse_iterator(_list_end->prev));
-			};
+			}
 			const_reverse_iterator rbegin(void) const {
 				return (const_reverse_iterator(_list_end->prev));
-			};
+			}
 			reverse_iterator rend(void) {
 				return (reverse_iterator(_list_begin));
-			};
+			}
 			const_reverse_iterator rend(void) const {
 				return (const_reverse_iterator(_list_begin));
-			};
+			}
 			bool empty(void) const
 			{
 				return (_length == 0);
-			};
+			}
 			size_type size(void) const
 			{
 				return (_length);
-			};
+			}
 			size_type max_size(void) const
 			{
 				return (std::numeric_limits<size_type>::max() / (sizeof(Node<T>)));
-			};
+			}
 			reference front(void)
 			{
 				return (_list_begin->next->data);
-			};
+			}
 			const_reference front(void) const
 			{
 				return (_list_begin->next->data);
-			};
+			}
 			reference back(void)
 			{
 				return (_list_end->prev->data);
-			};
+			}
 			const_reference back(void) const
 			{
 				return (_list_end->prev->data);
-			};
+			}
 			template <class InputIterator>
 			void assign(InputIterator first, InputIterator last)
 			{
 				clear();
 				while (first != last)
 					push_back(*(first++));
-			};
+			}
 			void assign(size_type n, const value_type &value)
 			{
 				clear();
 				while (n--)
 					push_back(value);
-			};
+			}
 			void push_front(const value_type &value)
 			{
 				node el = _new_node(value, _list_begin, _list_begin->next);
 				_list_begin->next->prev = el;
 				_list_begin->next = el;
 				++_length;
-			};
+			}
 			void pop_front(void)
 			{
 				node next = _list_begin->next->next;
@@ -185,7 +185,7 @@ namespace ft
 				_list_begin->next = next;
 				next->prev = _list_begin;
 				_length--;
-			};
+			}
 			void push_back(const value_type &value)
 			{
 				node el = _new_node(value, _list_end->prev, _list_end);
@@ -200,7 +200,7 @@ namespace ft
 				before->next = _list_end;
 				_list_end->prev = before;
 				_length--;
-			};
+			}
 			iterator insert(iterator position, const value_type &value)
 			{
 				if (position == begin())
@@ -220,12 +220,12 @@ namespace ft
 				after->prev = el;
 				++_length;
 				return (iterator(el));
-			};
+			}
 			void insert(iterator position, size_type n, const value_type &value)
 			{
 				while (n--)
 					position = insert(position, value);
-			};
+			}
 			template <class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last)
 			{
@@ -235,7 +235,7 @@ namespace ft
 					if (position != end())
 						position++;
 				}
-			};
+			}
 			iterator erase(iterator position)
 			{
 				if (position == begin())
@@ -255,26 +255,26 @@ namespace ft
 				next->prev = previous;
 				_length--;
 				return (iterator(next));
-			};
+			}
 			iterator erase(iterator first, iterator last)
 			{
 				while (first != last)
 					erase(first++);
 				return (first);
-			};
+			}
 			void swap(List &x)
 			{
 				ft::swap(x._length, _length);
 				ft::swap(x._list_begin, _list_begin);
 				ft::swap(x._list_end, _list_end);
-			};
+			}
 			void resize(size_type n, value_type value = value_type())
 			{
 				while (n < _length)
 					pop_back();
 				while (n > _length)
 					push_back(value);
-			};
+			}
 			void clear(void)
 			{
 				node cur = _list_begin->next;
@@ -287,21 +287,21 @@ namespace ft
 				_list_begin->next = _list_end;
 				_list_end->prev = _list_begin;
 				_length = 0;
-			};
+			}
 			void splice(iterator position, List &x)
 			{
 				splice(position, x, x.begin(), x.end());
-			};
+			}
 			void splice(iterator position, List &x, iterator i)
 			{
 				insert(position, *i);
 				x.erase(i);
-			};
+			}
 			void splice(iterator position, List &x, iterator first, iterator last)
 			{
 				insert(position, first, last);
 				x.erase(first, last);
-			};
+			}
 			void remove(const value_type &value)
 			{
 				iterator c = begin();
@@ -312,7 +312,7 @@ namespace ft
 					else
 						c++;
 				}
-			};
+			}
 			template <class Predicate>
 			void remove_if(Predicate pred)
 			{
@@ -324,11 +324,11 @@ namespace ft
 					else
 						c++;
 				}
-			};
+			}
 			void unique(void)
 			{
 				unique(_Equal<value_type>());
-			};
+			}
 			template <class BinaryPredicate>
 			void unique(BinaryPredicate binary_pred)
 			{
@@ -345,11 +345,11 @@ namespace ft
 					else
 						prev = next;
 				}
-			};
+			}
 			void merge(List &x)
 			{
 				merge(x, _Smaller<value_type>());
-			};
+			}
 			template <class Compare>
 			void merge(List &x, Compare comp)
 			{
@@ -358,11 +358,11 @@ namespace ft
 				insert(end(), x.begin(), x.end());
 				x.clear();
 				sort(comp);
-			};
+			}
 			void sort(void)
 			{
 				sort(_Smaller<value_type>());
-			};
+			}
 			template <class Compare>
 			void sort(Compare comp)
 			{
@@ -379,7 +379,7 @@ namespace ft
 					}
 					a++;
 				}
-			};
+			}
 			void reverse(void)
 			{
 				List<value_type> tmp;
@@ -387,13 +387,13 @@ namespace ft
 				while (it != end())
 					tmp.push_front(*(it++));
 				*this = tmp;
-			};
+			}
 	};
 	template <class T, class Alloc>
 	void swap(List<T, Alloc> &x, List<T, Alloc> &y)
 	{
 		x.swap(y);
-	};
+	}
 	template<typename T>
 	bool operator==(List<T> const &lhs, List<T> const &rhs) {
 		if (lhs.size() != rhs.size())
@@ -406,11 +406,11 @@ namespace ft
 				return (false);
 		}
 		return (true);
-	};
+	}
 	template<typename T>
 	bool operator!=(List<T> const &lhs, List<T> const &rhs) {
 		return (!(lhs == rhs));
-	};
+	}
 	template<typename T>
 	bool operator<(List<T> const &lhs, List<T> const &rhs) {
 		if (lhs.size() < rhs.size())
@@ -427,19 +427,22 @@ namespace ft
 			cur2++;
 		}
 		return (false);
-	};
+	}
 	template<typename T>
-	bool operator<=(List<T> const &lhs, List<T> const &rhs) {
+	bool operator<=(List<T> const &lhs, List<T> const &rhs)
+	{
 		return (!(rhs < lhs));
-	};
+	}
 	template<typename T>
-	bool operator>(List<T> const &lhs, List<T> const &rhs) {
+	bool operator>(List<T> const &lhs, List<T> const &rhs)
+	{
 		return (rhs < lhs);
-	};
+	}
 	template<typename T>
-	bool operator>=(List<T> const &lhs, List<T> const &rhs) {
+	bool operator>=(List<T> const &lhs, List<T> const &rhs)
+	{
 		return (!(lhs < rhs));
-	};
-};
+	}
+}
 
 #endif
