@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:49:06 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/30 13:26:44 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/30 14:44:54 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ namespace ft
 		protected:
 			node_T	_node;
 
-		private:
 			node_T	_successor(node_T _ptr)
 			{
 				node_T tmp;
@@ -72,6 +71,7 @@ namespace ft
 			MapIterator(void) : _node(0) {}
 			MapIterator(const node_T _ptr) : _node(_ptr)	{}
 			MapIterator(const MapIterator& src)
+			virtual ~MapIterator()	{}
 			{
 				*this = src;
 			}
@@ -144,10 +144,80 @@ namespace ft
 	class Const_MapIterator : public MapIterator<Key, T>
 	{
 		public:
-			bool&	operator*(void) const
+			~Const_MapIterator()	{}
+			val_type&	operator*(void) const
 			{
-				this->_node
-				return true;
+				return _node->_pair;
+			}
+			val_type*	operator->(void) const
+			{
+				return &(_node->_pair);
+			}
+	};
+
+	template <class Key, class T>
+	class ReverseIterator : public MapIterator<Key, T>
+	{
+		public:
+			~ReverseIterator() {}
+			ReverseIterator&	operator++(void)
+			{
+				_node = _predecessor(_node);
+				return *this;
+			}
+			ReverseIterator&	operator--(void)
+			{
+				_node = _successor(_node);
+				return *this;
+			}
+			ReverseIterator&	operator++(void)
+			{
+				ReverseIterator	tmp;
+				_node = _predecessor(_node);
+				return tmp;
+			}
+			ReverseIterator&	operator--(void)
+			{
+				ReverseIterator	tmp(*this);
+				_node = _successor(_node);
+				return tmp;
+			}
+	};
+
+	template <class Key, class T>
+	class Const_ReverseIterator : public MapIterator
+	{
+		public:
+			~Const_ReverseIterator()	{}
+			val_type&	operator*(void) const
+			{
+				return _node->_pair;
+			}
+			val_type*	operator->(void) const
+			{
+				return &(_node->_pair);
+			}
+			Const_ReverseIterator&	operator++(void)
+			{
+				_node = _predecessor(_node);
+				return *this;
+			}
+			Const_ReverseIterator&	operator--(void)
+			{
+				_node = _successor(_node);
+				return *this;
+			}
+			Const_ReverseIterator&	operator++(void)
+			{
+				Const_ReverseIterator	tmp;
+				_node = _predecessor(_node);
+				return tmp;
+			}
+			Const_ReverseIterator&	operator--(void)
+			{
+				Const_ReverseIterator	tmp(*this);
+				_node = _successor(_node);
+				return tmp;
 			}
 	};
 };
