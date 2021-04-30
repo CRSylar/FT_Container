@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 11:16:43 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 13:08:05 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/30 09:18:24 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,6 @@ namespace ft
 			{
 				*this = other;
 			}
-			/* ~Vector(void)
-			{
-				clear();
-				_allocator.deallocate(_container, _container_size);
-			} */
 			Vector &operator=(const Vector &other)
 			{
 				if (_container != 0)
@@ -141,7 +136,7 @@ namespace ft
 			void push_back(const value_type &value)
 			{
 				if (_container_size < _container_length + 1)
-					reserve(_container_size + 1);
+					reserve((_container_size == 0) ? 1 : _container_size * 2);
 				_container[_container_length++] = value;
 			}
 			size_type size(void) const
