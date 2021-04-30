@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:26:46 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/30 12:32:46 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/04/30 17:23:23 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ namespace ft
 		RBNode	*father;
 		bool	color;
 		bool	_nil;
+		bool	__bound;
 	};
-
 }
 
 #endif
