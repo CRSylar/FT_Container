@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/03 12:36:43 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:23:55 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ namespace ft
 				_new_->_pair = std::make_pair(_key, _value);
 				_new_->father = _father;
 				_new_->color = RED;
+				_new_->_nil = false;
+				_new_->_bound = false;
 				return _new_;
 			}
 			void	_free_tree(node _n, bool flag = false)
@@ -111,10 +113,14 @@ namespace ft
 				_leaf = new RBNode<key_type,val_type>();
 				__end = new RBNode<key_type,val_type>();
 				__rend = new RBNode<key_type,val_type>();
+				_leaf->_nil = __end->_nil = __rend->_nil = true;
+				__end->_bound = true;
+				__rend->_bound = true;
+				_leaf->_bound = false;
 				_root = 0;
 				_len = 0;
 			}
-			void	_link(node _root, node _new_, key_type _key)
+			void	_link(node& _root, node& _new_, key_type _key)
 			{
 				if (_key < _root->_pair.first)
 				{
@@ -142,7 +148,7 @@ namespace ft
 				}
 				_new_->father = _root;
 			}
-			void	_balance_insert(node _t)
+			void	_balance_insert(node& _t)
 			{
 				while (true)
 				{
@@ -188,7 +194,7 @@ namespace ft
 					}
 				}
 			}
-			void	_rotateSx(node _x)
+			void	_rotateSx(node& _x)
 			{
 				node _y = _x->dx;
 				node _p = _x->father;
@@ -209,7 +215,7 @@ namespace ft
 				else
 					_p->dx = _y;
 			}
-			void	_rotateDx(node _x)
+			void	_rotateDx(node& _x)
 			{
 				node	_y = _x->sx;
 				node	_p = _x->father;
@@ -229,6 +235,81 @@ namespace ft
 					_p->dx = _y;
 				else
 					_p->sx = _y;
+			}
+			void	balance_delete(node& _t)
+			{
+				while (_t != _root && _t->color == BLACK)
+				{
+					node _p = _t->father;
+					if (_t == _p->sx)
+					{
+						node _f = _p->dx;
+						node _ns = _f->sx;
+						node _nd = _f->dx;
+						if (_f->color == RED)
+						{
+							_p->color = RED;
+							_f->color = BLACK;
+							_rotateSx(_p);
+						}
+						else
+						{
+							if (_ns->color == _nd->color == BLACK)
+							{
+								_f->color = RED;
+								_t = _p;
+							}
+							else if (_ns->color == RED && _nd->color == BLACK)
+							{
+								_ns->color = BLACK;
+								_f->color = RED;
+								_rotateDx(_f);
+							}
+							else if (_nd->color == RED)
+							{
+								_f->color = _p->color;
+								_p->color = BLACK;
+								_nd->color = BLACK;
+								_rotateSx(_p);
+								_t = _root;
+							}
+						}
+					}
+					else
+					{
+						node _f = _p->sx;
+						node _ns = _f->dx;
+						node _nd = _f->sx;
+						if (_f->color == RED)
+						{
+							_p->color = RED;
+							_f->color = BLACK;
+							_rotateDx(_p);
+						}
+						else
+						{
+							if (_ns->color == _nd->color == BLACK)
+							{
+								_f->color = RED;
+								_t = _p;
+							}
+							else if (_ns->color == RED && _nd->color == BLACK)
+							{
+								_ns->color = BLACK;
+								_f->color = RED;
+								_rotateSx(_f);
+							}
+							else if (_nd->color == RED)
+							{
+								_f->color = _p->color;
+								_p->color = BLACK;
+								_nd->color = BLACK;
+								_rotateDx(_p);
+								_t = _root;
+							}
+						}
+					}
+				}
 			}
 		public:
 
@@ -266,20 +347,11 @@ namespace ft
 			}
 			iterator	begin(void)
 			{
-				node tmp = _root;
-				while (tmp->sx != __rend)
-				{
-					tmp = tmp->sx;
-				}
-				return (iterator(tmp));
+				return (iterator(__rend->father));
 			}
 			const_iterator	begin(void) const
 			{
-				node tmp = _root;
-				while (!tmp->sx->__rend)
-				{
-					tmp = tmp->sx;
-				}
+				return (iterator(__rend->father));
 			}
 			iterator	end(void)
 			{
@@ -352,12 +424,43 @@ namespace ft
 				}
 				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == value.first)
 					return (std::make_pair(iterator(tmp), false));
+				_len += 1;
 				tmp = _new_node(value.first, value.second, 0);
 				_link(tmpfather, tmp, value.first);
 				_balance_insert(tmp);
 				return (std::make_pair(iterator(tmp), true));
 			}
+			std::pair<iterator, bool>	insert(iterator first, iterator last)
+			{
+				std::pair<iterator, bool> _pair;
+				while (first != last)
+				{
+					_pair = insert(*first);
+					++first;
+				}
+				return _pair;
+			}
+			void	erase(iterator _pos)
+			{
+				node tmp = _root;
+				node tmpfather;
 
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _pos.node()->_pair.first)
+				{
+					tmpfather = tmp;
+					if (_pos.node()->_pair.first < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (_pos.node()->_pair.first > tmp->_pair.first)
+						tmp = tmp->dx;
+				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _pos.node()->_pair.first)
+				{
+					if (tmp == tmpfather->dx)
+
+					balance_delete(tmp);
+					_len -= 1;
+				}
+			}
 	};
 };
 

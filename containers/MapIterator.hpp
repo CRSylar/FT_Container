@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:49:06 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/03 08:12:26 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/03 15:46:11 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ namespace ft
 			node_T	_successor(node_T _ptr)
 			{
 				node_T tmp;
-				if (!_ptr->dx)
+				if (_ptr->dx->_bound)
+					return _ptr->dx;
+				if (_ptr->dx->_nil)
 				{
 					tmp = _ptr;
 					while (tmp->father && tmp == tmp->father->dx)
@@ -42,7 +44,7 @@ namespace ft
 				else
 				{
 					tmp =  _ptr->dx;
-					while (tmp->sx)
+					while (!tmp->sx->_nil)
 						tmp = tmp->sx;
 				}
 				return tmp;
@@ -51,7 +53,9 @@ namespace ft
 			node_T	_predecessor(node_T _ptr)
 			{
 				node_T tmp;
-				if (!_ptr->sx)
+				if (_ptr->sx->_bound)
+					return _ptr->sx;
+				if (_ptr->sx->_nil)
 				{
 					tmp = _ptr;
 					while (tmp->father && tmp == tmp->father->sx)
@@ -60,8 +64,8 @@ namespace ft
 				}
 				else
 				{
-					tmp =  _ptr->sx;
-					while (tmp->dx)
+					tmp = _ptr->sx;
+					while (!tmp->dx->_nil)
 						tmp = tmp->dx;
 				}
 				return tmp;
@@ -77,65 +81,65 @@ namespace ft
 			virtual ~MapIterator() {}
 			MapIterator& operator=(const MapIterator& src)
 			{
-				_node = src._node;
+				this->_node = src.node();
 				return *this;
 			}
-			node_T	node(void)
+			node_T	node(void) const
 			{
-				return _node;
+				return this->_node;
 			}
 			val_type&	operator*(void)
 			{
-				return _node->_pair;
+				return this->_node->_pair;
 			}
 			val_type*	operator->(void)
 			{
-				return &(_node->_pair);
+				return &(this->_node->_pair);
 			}
 			bool	operator==(const MapIterator<Key, T>& rght)
 			{
-				return _node = rght._node;
+				return this->_node = rght._node;
 			}
 			bool	operator!=(const MapIterator<Key, T>& rght)
 			{
-				return (!(_node == rght._node));
+				return (!(this->_node == rght._node));
 			}
 			bool	operator<(const MapIterator<Key, T>& rght)
 			{
-				return _node < rght._node;
+				return this->_node < rght._node;
 			}
 			bool	operator>(const MapIterator<Key, T>& rght)
 			{
-				return _node > rght._node;
+				return this->_node > rght._node;
 			}
 			bool	operator<=(const MapIterator<Key, T>& rght)
 			{
-				return (!(_node > rght._node));
+				return (!(this->_node > rght._node));
 			}
 			bool	operator>=(const MapIterator<Key, T>& rght)
 			{
-				return (!(_node < rght._node));
+				return (!(this->_node < rght._node));
 			}
 			MapIterator&	operator++(void)
 			{
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return *this;
 			}
 			MapIterator&	operator--(void)
 			{
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return *this;
 			}
 			MapIterator		operator++(int)
 			{
 				MapIterator tmp(*this);
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return tmp;
 			}
 			MapIterator		operator--(int)
 			{
 				MapIterator	tmp(*this);
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return tmp;
 			}
 	};
