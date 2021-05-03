@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/30 17:53:02 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/03 12:36:43 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # include <memory>
 # include <limits>
+# include <utility>
+# include <functional>
 # include "MapIterator.hpp"
 namespace ft
 {
@@ -46,7 +48,10 @@ namespace ft
 				friend class map;
 				protected:
 					Compare	comp;
-					value_compare(Compare c) : comp(c) {}
+					bool value_compare(Compare c)
+					{
+						comp(c);
+					}
 				public:
 					typedef bool			res_type;
 					typedef pair_type		first_arg;
@@ -65,49 +70,40 @@ namespace ft
 			node		__end;
 			node		__rend;
 			size_type	_len;
-			void	_print_node(node n)
+			void	_print_node(node n, int widh = 0)
 			{
 				if (!n)
 					return;
-				_print_node(n->sx);
-				if (n->father && !n->_nil)
-					std::cout << n->_pair.first << " = " << n->_pair.second << std::endl;
-				_print_node(n->dx);
+				_print_node(n->dx, widh + 4);
+				if (n != __end && n != __rend && n != _leaf)
+				{
+					std::cout << std::setw(widh) << ' ';
+					if (n->color == RED)
+						std::cout << "\x1B[31m";
+					std::cout << n->_pair.first << " = " << n->_pair.second << "\033[0m" << std::endl;
+				}
+				_print_node(n->sx, widh + 4);
 			}
 			node	_new_node(key_type _key, val_type _value, node _father)
 			{
 				node _new_ = new RBNode<key_type, val_type>();
 				_new_->_pair = std::make_pair(_key, _value);
-				_new_->dx = 0;
-				_new_->sx = 0;
 				_new_->father = _father;
 				_new_->color = RED;
 				return _new_;
 			}
-			void	_free_tree(node _n)
+			void	_free_tree(node _n, bool flag = false)
 			{
-				if (_n->dx)
-					_free_tree(_n->dx);
-				if (_n->sx)
-					_free_tree(_n->sx);
+				if (_n && (_n->dx != __end && _n->dx != _leaf))
+					_free_tree(_n->dx, true);
+				if (_n && (_n->sx != __rend && _n->sx != _leaf))
+					_free_tree(_n->sx, true);
 				delete _n;
-				delete _leaf;
-			}
-			void	_init_node(node& _n, int _last)
-			{
-				_n->dx = 0;
-				_n->sx = 0;
-				_n->color = 0;
-				_n->father = 0;
-				if (!_last)
+				if (!flag)
 				{
-					_n->_nil = true;
-					_n->__bound = false;
-				}
-				else
-				{
-					_n->_nil = false;
-					_n->__bound = true;
+					delete __end;
+					delete __rend;
+					delete _leaf;
 				}
 			}
 			void	_init_tree(void)
@@ -115,19 +111,132 @@ namespace ft
 				_leaf = new RBNode<key_type,val_type>();
 				__end = new RBNode<key_type,val_type>();
 				__rend = new RBNode<key_type,val_type>();
-				_init_node(_leaf, 0);
-				_init_node(__end, 1);
-				_init_node(__rend, 1);
 				_root = 0;
 				_len = 0;
 			}
-			node	_insert_node(pair_type&	_value)
+			void	_link(node _root, node _new_, key_type _key)
 			{
+				if (_key < _root->_pair.first)
+				{
+					if (_root->sx == __rend)
+					{
+						_new_->sx = __rend;
+						__rend->father = _new_;
+					}
+					else
+						_new_->sx = _leaf;
+					_root->sx = _new_;
+					_new_->dx = _leaf;
+				}
+				else
+				{
+					if (_root->dx == __end)
+					{
+						_new_->dx = __end;
+						__end->father = _new_;
+					}
+					else
+						_new_->dx = _leaf;
+					_root->dx = _new_;
+					_new_->sx = _leaf;
+				}
+				_new_->father = _root;
+			}
+			void	_balance_insert(node _t)
+			{
+				while (true)
+				{
+					node _p = _t->father;
+					node _n = (_p == 0) ? 0 : _p->father;
+					node _z = ((_n == 0) ? _leaf : (_n->sx == _p) ? _n->dx : _n->sx);
 
+					if (_p == 0)
+					{
+						_t->color = BLACK;
+						return ;
+					}
+					else if (_p->color == BLACK)
+						return ;
+					else if (_z->color == RED)
+					{
+						_p->color = _z->color = BLACK;
+						_n->color = RED;
+						_t = _n;
+					}
+					else
+					{
+						if (_t == _p->dx && _p == _n->sx)
+						{
+							_rotateSx(_p);
+							_t = _p;
+						}
+						else if (_t == _p->sx && _p == _n->dx)
+						{
+							_rotateDx(_p);
+							_t = _p;
+						}
+						else
+						{
+							if (_t == _p->sx && _p == _n->sx)
+								_rotateDx(_n);
+							else if (_t == _p->dx && _p == _n->dx)
+								_rotateSx(_n);
+							_p->color = BLACK;
+							_n->color = RED;
+							return ;
+						}
+					}
+				}
+			}
+			void	_rotateSx(node _x)
+			{
+				node _y = _x->dx;
+				node _p = _x->father;
+
+				_x->dx = _y->sx;
+				if (_y->sx != _leaf && _y->sx != __rend && _y->sx != __end)
+					_y->sx->father = _x;
+				_y->sx = _x;
+				_x->father = _y;
+				_y->father = _p;
+				if (!_p)
+				{
+					_root = _y;
+					return ;
+				}
+				if (_p->sx == _x)
+					_p->sx = _y;
+				else
+					_p->dx = _y;
+			}
+			void	_rotateDx(node _x)
+			{
+				node	_y = _x->sx;
+				node	_p = _x->father;
+
+				_x->sx = _y->dx;
+				if (_y->dx != _leaf && _y->dx != __rend && _y->dx != __end)
+					_y->dx->father = _x;
+				_y->dx = _x;
+				_x->father = _y;
+				_y->father = _p;
+				if (!_p)
+				{
+					_root = _y;
+					return ;
+				}
+				if (_p->dx == _x)
+					_p->dx = _y;
+				else
+					_p->sx = _y;
+			}
+		public:
+
+			void	print(void)
+			{
+				_print_node(_root);
 			}
 
-
-		public:
 			explicit Map(const key_comp& comp = key_comp(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
@@ -151,14 +260,14 @@ namespace ft
 			}
 			Map&	operator=(const Map<Key, T>& rght)
 			{
-				clear();
+				//clear();
 				insert(rght.begin(), rght.end());
 				return *this;
 			}
 			iterator	begin(void)
 			{
 				node tmp = _root;
-				while (!tmp->sx->_nil)
+				while (tmp->sx != __rend)
 				{
 					tmp = tmp->sx;
 				}
@@ -167,7 +276,7 @@ namespace ft
 			const_iterator	begin(void) const
 			{
 				node tmp = _root;
-				while (!tmp->sx->_nil)
+				while (!tmp->sx->__rend)
 				{
 					tmp = tmp->sx;
 				}
@@ -219,14 +328,36 @@ namespace ft
 			}
 			std::pair<iterator, bool>	insert(const pair_type& value)
 			{
-				iterator tmp;
-				tmp = find(value.first);
-				if (tmp != end())
-					return (std::make_pair(tmp, false));
-				_len++;
-				tmp = iterator(_insert_node(value));
-				return (std::make_pair(tmp, true));
+				node tmp = _root;
+				node tmpfather;
+
+				if (!_root)
+				{
+					_root = _new_node(value.first, value.second, 0);
+					_root->color = BLACK;
+					_root->sx = __rend;
+					_root->dx = __end;
+					__rend->father = _root;
+					__end->father = _root;
+					_len += 1;
+					return std::make_pair(begin(), true);
+				}
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != value.first)
+				{
+					tmpfather = tmp;
+					if (value.first < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (value.first > tmp->_pair.first)
+						tmp = tmp->dx;
+				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == value.first)
+					return (std::make_pair(iterator(tmp), false));
+				tmp = _new_node(value.first, value.second, 0);
+				_link(tmpfather, tmp, value.first);
+				_balance_insert(tmp);
+				return (std::make_pair(iterator(tmp), true));
 			}
+
 	};
 };
 

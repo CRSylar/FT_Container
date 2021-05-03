@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:49:06 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/30 14:44:54 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/03 08:12:26 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ namespace ft
 			MapIterator(void) : _node(0) {}
 			MapIterator(const node_T _ptr) : _node(_ptr)	{}
 			MapIterator(const MapIterator& src)
-			virtual ~MapIterator()	{}
 			{
 				*this = src;
 			}
+			virtual ~MapIterator() {}
 			MapIterator& operator=(const MapIterator& src)
 			{
 				_node = src._node;
@@ -144,14 +144,17 @@ namespace ft
 	class Const_MapIterator : public MapIterator<Key, T>
 	{
 		public:
+			typedef std::pair<Key, T>	val_type;
+			typedef std::pair<Key, T>&	val_ref;
+			typedef RBNode<Key, T>*		node_T;
 			~Const_MapIterator()	{}
 			val_type&	operator*(void) const
 			{
-				return _node->_pair;
+				return this->_node->_pair;
 			}
 			val_type*	operator->(void) const
 			{
-				return &(_node->_pair);
+				return &(this->_node->_pair);
 			}
 	};
 
@@ -159,64 +162,70 @@ namespace ft
 	class ReverseIterator : public MapIterator<Key, T>
 	{
 		public:
+			typedef std::pair<Key, T>	val_type;
+			typedef std::pair<Key, T>&	val_ref;
+			typedef RBNode<Key, T>*		node_T;
 			~ReverseIterator() {}
 			ReverseIterator&	operator++(void)
 			{
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return *this;
 			}
 			ReverseIterator&	operator--(void)
 			{
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return *this;
 			}
-			ReverseIterator&	operator++(void)
+			ReverseIterator	operator++(int)
 			{
 				ReverseIterator	tmp;
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return tmp;
 			}
-			ReverseIterator&	operator--(void)
+			ReverseIterator	operator--(int)
 			{
 				ReverseIterator	tmp(*this);
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return tmp;
 			}
 	};
 
 	template <class Key, class T>
-	class Const_ReverseIterator : public MapIterator
+	class Const_ReverseIterator : public MapIterator<Key, T>
 	{
 		public:
+			typedef std::pair<Key, T>	val_type;
+			typedef std::pair<Key, T>&	val_ref;
+			typedef RBNode<Key, T>*		node_T;
 			~Const_ReverseIterator()	{}
 			val_type&	operator*(void) const
 			{
-				return _node->_pair;
+				return this->_node->_pair;
 			}
 			val_type*	operator->(void) const
 			{
-				return &(_node->_pair);
+				return &(this->_node->_pair);
 			}
 			Const_ReverseIterator&	operator++(void)
 			{
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return *this;
 			}
 			Const_ReverseIterator&	operator--(void)
 			{
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return *this;
 			}
-			Const_ReverseIterator&	operator++(void)
+			Const_ReverseIterator	operator++(int)
 			{
 				Const_ReverseIterator	tmp;
-				_node = _predecessor(_node);
+				this->_node = _predecessor(this->_node);
 				return tmp;
 			}
-			Const_ReverseIterator&	operator--(void)
+			Const_ReverseIterator	operator--(int)
 			{
 				Const_ReverseIterator	tmp(*this);
-				_node = _successor(_node);
+				this->_node = _successor(this->_node);
 				return tmp;
 			}
 	};
