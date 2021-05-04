@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/03 18:23:55 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:43:27 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft
 			typedef Key										key_type;
 			typedef	T										val_type;
 			typedef	std::pair<const key_type, val_type>		pair_type;
-			typedef	Compare									key_comp;
+			typedef	Compare									key_compare;
 			typedef Alloc									alloc_type;
 			typedef	T&										val_ref;
 			typedef	const T&								const_val_ref;
@@ -64,7 +64,7 @@ namespace ft
 
 		private:
 			alloc_type	_allocator;
-			key_comp	_comp;
+			key_compare	_comp;
 			node		_root;
 			node		_leaf;
 			node		__end;
@@ -74,7 +74,8 @@ namespace ft
 			{
 				if (!n)
 					return;
-				_print_node(n->dx, widh + 4);
+				if (n->dx != __end && n->dx != _leaf)
+					_print_node(n->dx, widh + 4);
 				if (n != __end && n != __rend && n != _leaf)
 				{
 					std::cout << std::setw(widh) << ' ';
@@ -82,7 +83,8 @@ namespace ft
 						std::cout << "\x1B[31m";
 					std::cout << n->_pair.first << " = " << n->_pair.second << "\033[0m" << std::endl;
 				}
-				_print_node(n->sx, widh + 4);
+				if (n->sx != __rend && n->sx != _leaf)
+					_print_node(n->sx, widh + 4);
 			}
 			node	_new_node(key_type _key, val_type _value, node _father)
 			{
@@ -122,29 +124,32 @@ namespace ft
 			}
 			void	_link(node& _root, node& _new_, key_type _key)
 			{
+				if (_root)
+				{
 				if (_key < _root->_pair.first)
-				{
-					if (_root->sx == __rend)
 					{
-						_new_->sx = __rend;
-						__rend->father = _new_;
-					}
-					else
-						_new_->sx = _leaf;
-					_root->sx = _new_;
-					_new_->dx = _leaf;
-				}
-				else
-				{
-					if (_root->dx == __end)
-					{
-						_new_->dx = __end;
-						__end->father = _new_;
-					}
-					else
+						if (_root->sx == __rend)
+						{
+							_new_->sx = __rend;
+							__rend->father = _new_;
+						}
+						else
+							_new_->sx = _leaf;
+						_root->sx = _new_;
 						_new_->dx = _leaf;
-					_root->dx = _new_;
-					_new_->sx = _leaf;
+					}
+					else
+					{
+						if (_root->dx == __end)
+						{
+							_new_->dx = __end;
+							__end->father = _new_;
+						}
+						else
+							_new_->dx = _leaf;
+						_root->dx = _new_;
+						_new_->sx = _leaf;
+					}
 				}
 				_new_->father = _root;
 			}
@@ -244,8 +249,8 @@ namespace ft
 					if (_t == _p->sx)
 					{
 						node _f = _p->dx;
-						node _ns = _f->sx;
-						node _nd = _f->dx;
+						node _ns = _f->dx;
+						node _nd = _f->sx;
 						if (_f->color == RED)
 						{
 							_p->color = RED;
@@ -278,8 +283,8 @@ namespace ft
 					else
 					{
 						node _f = _p->sx;
-						node _ns = _f->dx;
-						node _nd = _f->sx;
+						node _ns = _f->sx;
+						node _nd = _f->dx;
 						if (_f->color == RED)
 						{
 							_p->color = RED;
@@ -318,13 +323,13 @@ namespace ft
 				_print_node(_root);
 			}
 
-			explicit Map(const key_comp& comp = key_comp(), const alloc_type alloc=alloc_type()) :
+			explicit Map(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
 				_init_tree();
 			}
 			template <class InputIterator>
-			Map(InputIterator first, InputIterator last, const key_comp& comp = key_comp(), const alloc_type alloc = alloc_type()) :
+			Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
 				_allocator(alloc), _comp(comp)
 				{
 					_init_tree();
@@ -341,7 +346,7 @@ namespace ft
 			}
 			Map&	operator=(const Map<Key, T>& rght)
 			{
-				//clear();
+				//this->clear();
 				insert(rght.begin(), rght.end());
 				return *this;
 			}
@@ -351,7 +356,7 @@ namespace ft
 			}
 			const_iterator	begin(void) const
 			{
-				return (iterator(__rend->father));
+				return (const_iterator(__rend->father));
 			}
 			iterator	end(void)
 			{
@@ -391,12 +396,8 @@ namespace ft
 			}
 			val_type&	operator[](const key_type& _k)
 			{
-				iterator tmp = find(_k);
-				if (tmp != end())
-				{
-					return tmp._node->_pair.second;
-				}
-				return (insert(std::make_pair(_k, val_type())));
+				std::pair<iterator, bool> _out = insert(std::make_pair(_k, val_type()));
+				return _out.first->second;
 			}
 			std::pair<iterator, bool>	insert(const pair_type& value)
 			{
@@ -430,17 +431,25 @@ namespace ft
 				_balance_insert(tmp);
 				return (std::make_pair(iterator(tmp), true));
 			}
-			std::pair<iterator, bool>	insert(iterator first, iterator last)
+			iterator	insert(iterator _pos, const pair_type& value)
+			{
+				pair_type ret = insert(value);
+				_pos = ret.first;
+				return _pos;
+			}
+			template <class InputIterator>
+			std::pair<iterator, bool>	insert(InputIterator first, InputIterator last)
 			{
 				std::pair<iterator, bool> _pair;
-				while (first != last)
+				while (first != last && first != 0)
 				{
 					_pair = insert(*first);
 					++first;
 				}
 				return _pair;
 			}
-			void	erase(iterator _pos)
+			template <class InputIterator>
+			void	erase(InputIterator _pos)
 			{
 				node tmp = _root;
 				node tmpfather;
@@ -455,11 +464,171 @@ namespace ft
 				}
 				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _pos.node()->_pair.first)
 				{
-					if (tmp == tmpfather->dx)
-
-					balance_delete(tmp);
+					if ((tmp->sx != __rend) && (tmp->sx != _leaf) && (tmp->dx != _leaf) && (tmp->dx != __end))
+					{
+						node _min = tmp->dx;
+						while (_min->sx != __rend && _min->sx != _leaf)
+							_min = _min->sx;
+						tmp->_pair.first = _min->_pair.first;
+						tmp->_pair.second = _min->_pair.second;
+						_pos.node()->_pair.first = _min->_pair.first;
+						tmp = _min;
+					}
+					node _t;
+					if (tmp->sx != __rend && tmp->sx != _leaf && (tmp->dx == _leaf || tmp->dx == __end))
+						_t = tmp->sx;
+					else
+						_t = tmp->dx;
+					_link(tmp->father, _t, _pos.node()->_pair.first);
+					if (tmp->color == BLACK)
+						balance_delete(_t);
+					if (tmp->father == 0)
+						_root = _t;
+					delete tmp;
 					_len -= 1;
 				}
+				while (_root->father != 0)
+					_root = _root->father;
+			}
+			template <class InputIterator>
+			void	erase(InputIterator first, InputIterator last)
+			{
+				while (first != last && first != 0)
+				{
+					erase(first);
+					++first;
+				}
+			}
+			size_type	erase(const key_type& _key)
+			{
+				node tmp = _root;
+				node tmpfather;
+
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				{
+					tmpfather = tmp;
+					if (_key < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (_key > tmp->_pair.first)
+						tmp = tmp->dx;
+				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+				{
+					erase(iterator(tmp));
+					return 1;
+				}
+				return 0;
+			}
+			void	clear(void)
+			{
+				erase(this->begin(), this->end());
+			}
+			iterator	lower_bound(const key_type& _k)
+			{
+				for (iterator it = begin(); it != end(); ++it)
+				{
+					if (!_comp(*it, _k))
+						return it;
+				}
+				return end();
+			}
+			const_iterator	lower_bound(const key_type& _k) const
+			{
+				for (const_iterator it = begin(); it != end(); ++it)
+				{
+					if (!_comp(*it, _k))
+						return it;
+				}
+				return end();
+			}
+			iterator	upper_bound(const key_type& _k)
+			{
+				for (iterator it = begin(); it != end(); ++it)
+				{
+					if (_comp(*it, _k))
+						return it;
+				}
+				return end();
+			}
+			const_iterator	upper_bound(const key_type& _k) const
+			{
+				for (const_iterator it = begin(); it != end(); ++it)
+				{
+					if (_comp(*it, _k))
+						return it;
+				}
+				return end();
+			}
+			std::pair<iterator, iterator>	equal_range(const key_type& _k)
+			{
+				std::pair<iterator, iterator> _ret;
+
+				_ret.first = lower_bound(_k);
+				_ret.second = upper_bound(_k);
+				return _ret;
+			}
+			std::pair<const_iterator, const_iterator>	equal_range(const key_type& _k) const
+			{
+				std::pair<const_iterator, const_iterator> _ret;
+
+				_ret.first = lower_bound(_k);
+				_ret.second = upper_bound(_k);
+				return _ret;
+			}
+			key_compare	key_comp(void) const
+			{
+				return _comp;
+			}
+			val_comp	value_comp(void) const
+			{
+				return val_comp();
+			}
+			iterator	find(const key_type& _key)
+			{
+				node tmp = _root;
+
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				{
+					if (_key < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (_key > tmp->_pair.first)
+						tmp = tmp->dx;
+				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+					return (iterator(tmp));
+				return end();
+			}
+			const_iterator	find(const key_type& _key) const
+			{
+				node tmp = _root;
+
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				{
+					if (_key < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (_key > tmp->_pair.first)
+						tmp = tmp->dx;
+				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+					return (const_iterator(tmp));
+				return end();
+			}
+			size_type	count(const key_type& _k) const
+			{
+				if (find(_k) != end())
+					return 1;
+				return 0;
+			}
+			void	swap(Map& x)
+			{
+				Map tmp(this->begin(), this->end());
+				this->clear();
+				_root = nullptr;
+				*this = x;
+				x.clear();
+				x._root = nullptr;
+				x = tmp;
+				tmp.clear();
 			}
 	};
 };
