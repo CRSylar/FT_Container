@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/04/29 14:40:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/04 14:56:17 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	test_constructor(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	myvec.push_back(1);
 	myvec.push_back(10);
 	myvec.push_back(42);
@@ -47,7 +47,7 @@ static void	test_constructor(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 
@@ -70,15 +70,15 @@ static void	test_copy_constructor(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	if (myvec == mycopy)
 		std::cout << "myvec == mycopy	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == mycopy	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == mycopy	" << _RED << FAIL << NC << std::endl;
 	if (mycopy == revec)
 		std::cout << "revec == mycopy	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "revec == mycopy	" << RED << FAIL << NC << std::endl;
+		std::cout << "revec == mycopy	" << _RED << FAIL << NC << std::endl;
 }
 
 
@@ -91,7 +91,7 @@ static void	test_max_size(void)
 	if (v1.max_size() == v2.max_size())
 		std::cout << "myvec_max_size() == revec_max_size()	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec_max_size() == revec_max_size()	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec_max_size() == revec_max_size()	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_resize(void)
@@ -105,13 +105,13 @@ static void	test_resize(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	myvec.resize(2, "42");
 	revec.resize(2, "42");
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 
 }
 
@@ -136,13 +136,13 @@ static void	test_access_op(void)
 		if (myvec[i] == revec[i])
 			std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 		else
-			std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+			std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	}
 	for(int i = 100; i < 103; i++)
 	{
 		try
 		{
-			std::cout << myvec[i] << RED << FAIL << NC << std::endl;
+			std::cout << myvec[i] << _RED << FAIL << NC << std::endl;
 		}
 		catch(const std::exception& e)
 		{
@@ -151,7 +151,7 @@ static void	test_access_op(void)
 	}
 	try
 	{
-		std::cout << myvec[-1] << RED << FAIL << NC << std::endl;
+		std::cout << myvec[-1] << _RED << FAIL << NC << std::endl;
 	}
 	catch(const std::exception& e)
 	{
@@ -178,11 +178,11 @@ static void	test_front_back(void)
 	if (myvec.front() == revec.front())
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	if (myvec.back() == revec.back())
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_assign(void)
@@ -198,7 +198,7 @@ static void	test_assign(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_insert(void)
@@ -220,7 +220,7 @@ static void	test_insert(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_erase(void)
@@ -255,7 +255,7 @@ static void	test_erase(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_swap(void)
@@ -282,11 +282,11 @@ static void	test_swap(void)
 	if (myvec == revec)
 		std::cout << "myvec == revec		" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec		" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec		" << _RED << FAIL << NC << std::endl;
 	if (myswap == reswap)
 		std::cout << "myswap == reswap	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myswap == reswap	" << RED << FAIL << NC << std::endl;
+		std::cout << "myswap == reswap	" << _RED << FAIL << NC << std::endl;
 }
 
 static void	test_operators(void)
@@ -308,22 +308,22 @@ static void	test_operators(void)
 	if (v1 == v3)
 		std::cout << "v1 == v3		" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "v1 == v3		" << RED << FAIL << NC << std::endl;
+		std::cout << "v1 == v3		" << _RED << FAIL << NC << std::endl;
 	v3.push_back(42);
 	if (v1 != v3)
 		std::cout << "v1 != v3		" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "v1 != v3		" << RED << FAIL << NC << std::endl;
+		std::cout << "v1 != v3		" << _RED << FAIL << NC << std::endl;
 
 	if (v3 >= v1)
 		std::cout << "v1 >= v3		" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "v1 >= v3		" << RED << FAIL << NC << std::endl;
+		std::cout << "v1 >= v3		" << _RED << FAIL << NC << std::endl;
 
 	if (v1 <= v3)
 		std::cout << "v1 <= v3		" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "v1 <= v3		" << RED << FAIL << NC << std::endl;
+		std::cout << "v1 <= v3		" << _RED << FAIL << NC << std::endl;
 }
 
 void	testVector(void)

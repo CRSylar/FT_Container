@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:26:46 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/03 15:43:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/04 14:56:49 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ namespace ft
 
 		RBNode<Key, T>()
 		{
-			color = BLACK;
+			color = 1;
 			sx = dx = father = 0;
 		}
 		RBNode<Key, T>& operator=(const RBNode<Key, T> src)

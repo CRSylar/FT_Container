@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/04 12:43:27 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:05:38 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,10 +480,10 @@ namespace ft
 					else
 						_t = tmp->dx;
 					_link(tmp->father, _t, _pos.node()->_pair.first);
-					if (tmp->color == BLACK)
-						balance_delete(_t);
-					if (tmp->father == 0)
-						_root = _t;
+						if (tmp->color == BLACK)
+							balance_delete(_t);
+						if (tmp->father == 0)
+							_root = _t;
 					delete tmp;
 					_len -= 1;
 				}
@@ -628,7 +628,6 @@ namespace ft
 				x.clear();
 				x._root = nullptr;
 				x = tmp;
-				tmp.clear();
 			}
 	};
 };

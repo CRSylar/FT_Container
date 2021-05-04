@@ -37,7 +37,7 @@ static void	test_constructor(void)
 	if (myvec.size() == revec.size())
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 	myvec.push(1);
 	myvec.push(10);
 	myvec.push(42);
@@ -47,7 +47,7 @@ static void	test_constructor(void)
 	if (myvec.size() == revec.size())
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 
@@ -70,7 +70,7 @@ static void	test_front_back(void)
 	if (myvec.top() == revec.top())
 		std::cout << "myvec == revec	" << GRN << GOOD << NC << std::endl;
 	else
-		std::cout << "myvec == revec	" << RED << FAIL << NC << std::endl;
+		std::cout << "myvec == revec	" << _RED << FAIL << NC << std::endl;
 }
 
 
