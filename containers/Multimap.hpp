@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 12:53:49 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:58:39 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 namespace ft
 {
 	template <class Key, class T, class Compare=std::less<Key>, class Alloc=std::allocator<std::pair<const Key, T> > >
-	class Map
+	class MultiMap
 	{
 		public:
 			typedef Key										key_type;
@@ -323,28 +323,28 @@ namespace ft
 				_print_node(_root);
 			}
 
-			explicit Map(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
+			explicit MultiMap(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
 				_init_tree();
 			}
 			template <class InputIterator>
-			Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
+			MultiMap(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
 				_allocator(alloc), _comp(comp)
 				{
 					_init_tree();
 					insert(first, last);
 				}
-			Map(const Map<Key, T>& src)
+			MultiMap(const MultiMap<Key, T>& src)
 			{
 				_init_tree();
 				*this = src;
 			}
-			~Map(void)
+			~MultiMap(void)
 			{
 				_free_tree(_root);
 			}
-			Map&	operator=(const Map<Key, T>& rght)
+			MultiMap&	operator=(const MultiMap<Key, T>& rght)
 			{
 				//this->clear();
 				insert(rght.begin(), rght.end());
@@ -395,11 +395,6 @@ namespace ft
 			{
 				return (std::numeric_limits<size_type>::max() / (sizeof(ft::RBNode<key_type, val_type>)));
 			}
-			val_type&	operator[](const key_type& _k)
-			{
-				std::pair<iterator, bool> _out = insert(std::make_pair(_k, val_type()));
-				return _out.first->second;
-			}
 			std::pair<iterator, bool>	insert(const pair_type& value)
 			{
 				node tmp = _root;
@@ -416,16 +411,14 @@ namespace ft
 					_len += 1;
 					return std::make_pair(begin(), true);
 				}
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != value.first)
+				while (tmp != __end && tmp != __rend && tmp != _leaf)
 				{
 					tmpfather = tmp;
-					if (value.first < tmp->_pair.first)
+					if (value.first <= tmp->_pair.first)
 						tmp = tmp->sx;
 					else if (value.first > tmp->_pair.first)
 						tmp = tmp->dx;
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == value.first)
-					return (std::make_pair(iterator(tmp), false));
 				_len += 1;
 				tmp = _new_node(value.first, value.second, 0);
 				_link(tmpfather, tmp, value.first);
@@ -504,19 +497,25 @@ namespace ft
 			{
 				node tmp = _root;
 				node tmpfather;
+				bool flag = true;
 
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				while (flag)
 				{
-					tmpfather = tmp;
-					if (_key < tmp->_pair.first)
-						tmp = tmp->sx;
-					else if (_key > tmp->_pair.first)
-						tmp = tmp->dx;
-				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
-				{
-					erase(iterator(tmp));
-					return 1;
+					flag = false;
+					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+					{
+						tmpfather = tmp;
+						if (_key < tmp->_pair.first)
+							tmp = tmp->sx;
+						else if (_key > tmp->_pair.first)
+							tmp = tmp->dx;
+					}
+					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+					{
+						flag = true;
+						erase(iterator(tmp));
+						return 1;
+					}
 				}
 				return 0;
 			}
@@ -620,9 +619,9 @@ namespace ft
 					return 1;
 				return 0;
 			}
-			void	swap(Map& x)
+			void	swap(MultiMap& x)
 			{
-				Map tmp(this->begin(), this->end());
+				MultiMap tmp(this->begin(), this->end());
 				this->clear();
 				_root = nullptr;
 				*this = x;
