@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 10:12:13 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:51:28 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,36 +122,36 @@ namespace ft
 				_root = 0;
 				_len = 0;
 			}
-			void	_link(node& _root, node& _new_, key_type _key)
+			void	_link(node& _u, node& _new_, key_type _key)
 			{
-				if (_root)
+				if (_u)
 				{
-				if (_key < _root->_pair.first)
+				if (_key < _u->_pair.first)
 					{
-						if (_root->sx == __rend)
+						if (_u->sx == __rend)
 						{
 							_new_->sx = __rend;
 							__rend->father = _new_;
 						}
 						else
 							_new_->sx = _leaf;
-						_root->sx = _new_;
+						_u->sx = _new_;
 						_new_->dx = _leaf;
 					}
 					else
 					{
-						if (_root->dx == __end)
+						if (_u->dx == __end)
 						{
 							_new_->dx = __end;
 							__end->father = _new_;
 						}
 						else
 							_new_->dx = _leaf;
-						_root->dx = _new_;
+						_u->dx = _new_;
 						_new_->sx = _leaf;
 					}
 				}
-				_new_->father = _root;
+				_new_->father = _u;
 			}
 			void	_balance_insert(node& _t)
 			{
@@ -283,8 +283,8 @@ namespace ft
 					else
 					{
 						node _f = _p->sx;
-						node _ns = _f->sx;
-						node _nd = _f->dx;
+						node _ns = _f->dx;
+						node _nd = _f->sx;
 						if (_f->color == RED)
 						{
 							_p->color = RED;

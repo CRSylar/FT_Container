@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 09:27:54 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:52:34 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ static void	test_erase(void)
 	std::cout << "tree before erasing" << std::endl;
 	m1.print();
 
-	std::cout << "tree after erasing the element with key = 1" << std::endl;
-	m1.erase(1);
+	std::cout << "tree after erasing the element with key = 13" << std::endl;
+	m1.erase(13);
 	m1.print();
 
 }

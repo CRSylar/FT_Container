@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MultiMap.hpp                                            :+:      :+:    :+:   */
+/*   Multimap.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/04 16:05:38 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:53:49 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 namespace ft
 {
 	template <class Key, class T, class Compare=std::less<Key>, class Alloc=std::allocator<std::pair<const Key, T> > >
-	class MultiMap
+	class Map
 	{
 		public:
 			typedef Key										key_type;
@@ -122,37 +122,36 @@ namespace ft
 				_root = 0;
 				_len = 0;
 			}
-			void	_link(node& _p, node& _u, key_type _key)
+			void	_link(node& _u, node& _new_, key_type _key)
 			{
-				if (_u != _leaf && _u != __rend && _u != __end)
-					_u->father = _p;
-				if (_p != _leaf && _p != __end && _p != __rend && _p != 0)
+				if (_u)
 				{
-					if (_key < _p->_pair.first)
+				if (_key < _u->_pair.first)
 					{
-						if (_p->sx == __rend)
+						if (_u->sx == __rend)
 						{
-							_u->sx = __rend;
-							__rend->father = _u;
+							_new_->sx = __rend;
+							__rend->father = _new_;
 						}
 						else
-							_u->sx = _leaf;
-						_p->sx = _u;
-						_u->dx = _leaf;
+							_new_->sx = _leaf;
+						_u->sx = _new_;
+						_new_->dx = _leaf;
 					}
 					else
 					{
-						if (_p->dx == __end)
+						if (_u->dx == __end)
 						{
-							_u->dx = __end;
-							__end->father = _u;
+							_new_->dx = __end;
+							__end->father = _new_;
 						}
 						else
-							_u->dx = _leaf;
-						_p->dx = _u;
-						_u->sx = _leaf;
+							_new_->dx = _leaf;
+						_u->dx = _new_;
+						_new_->sx = _leaf;
 					}
 				}
+				_new_->father = _u;
 			}
 			void	_balance_insert(node& _t)
 			{
@@ -284,8 +283,8 @@ namespace ft
 					else
 					{
 						node _f = _p->sx;
-						node _ns = _f->sx;
-						node _nd = _f->dx;
+						node _ns = _f->dx;
+						node _nd = _f->sx;
 						if (_f->color == RED)
 						{
 							_p->color = RED;
@@ -324,28 +323,28 @@ namespace ft
 				_print_node(_root);
 			}
 
-			explicit MultiMap(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
+			explicit Map(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
 				_init_tree();
 			}
 			template <class InputIterator>
-			MultiMap(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
+			Map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
 				_allocator(alloc), _comp(comp)
 				{
 					_init_tree();
 					insert(first, last);
 				}
-			MultiMap(const MultiMap<Key, T>& src)
+			Map(const Map<Key, T>& src)
 			{
 				_init_tree();
 				*this = src;
 			}
-			~MultiMap(void)
+			~Map(void)
 			{
 				_free_tree(_root);
 			}
-			MultiMap&	operator=(const MultiMap<Key, T>& rght)
+			Map&	operator=(const Map<Key, T>& rght)
 			{
 				//this->clear();
 				insert(rght.begin(), rght.end());
@@ -396,10 +395,15 @@ namespace ft
 			{
 				return (std::numeric_limits<size_type>::max() / (sizeof(ft::RBNode<key_type, val_type>)));
 			}
+			val_type&	operator[](const key_type& _k)
+			{
+				std::pair<iterator, bool> _out = insert(std::make_pair(_k, val_type()));
+				return _out.first->second;
+			}
 			std::pair<iterator, bool>	insert(const pair_type& value)
 			{
 				node tmp = _root;
-				node tmpfather = 0;
+				node tmpfather;
 
 				if (!_root)
 				{
@@ -412,17 +416,19 @@ namespace ft
 					_len += 1;
 					return std::make_pair(begin(), true);
 				}
-				while (tmp != __end && tmp != __rend && tmp != _leaf)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != value.first)
 				{
 					tmpfather = tmp;
-					if (value.first <= tmp->_pair.first)
+					if (value.first < tmp->_pair.first)
 						tmp = tmp->sx;
 					else if (value.first > tmp->_pair.first)
 						tmp = tmp->dx;
 				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == value.first)
+					return (std::make_pair(iterator(tmp), false));
 				_len += 1;
 				tmp = _new_node(value.first, value.second, 0);
-				_link((tmpfather == 0) ? _root : tmpfather, tmp, value.first);
+				_link(tmpfather, tmp, value.first);
 				_balance_insert(tmp);
 				return (std::make_pair(iterator(tmp), true));
 			}
@@ -447,7 +453,7 @@ namespace ft
 			void	erase(InputIterator _pos)
 			{
 				node tmp = _root;
-				node tmpfather = 0;
+				node tmpfather;
 
 				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _pos.node()->_pair.first)
 				{
@@ -472,15 +478,13 @@ namespace ft
 					node _t;
 					if (tmp->sx != __rend && tmp->sx != _leaf && (tmp->dx == _leaf || tmp->dx == __end))
 						_t = tmp->sx;
-					else if ((tmp->sx == __rend || tmp->sx != _leaf) && tmp->dx != _leaf && tmp->dx != __end)
-						_t = tmp->dx;
 					else
-						_t = _leaf;
+						_t = tmp->dx;
 					_link(tmp->father, _t, _pos.node()->_pair.first);
-					if (tmp->color == BLACK)
-						balance_delete(_t);
-					if (tmp->father == 0)
-						_root = _t;
+						if (tmp->color == BLACK)
+							balance_delete(_t);
+						if (tmp->father == 0)
+							_root = _t;
 					delete tmp;
 					_len -= 1;
 				}
@@ -500,29 +504,21 @@ namespace ft
 			{
 				node tmp = _root;
 				node tmpfather;
-				size_type ret = 0;
-				bool flag = true;
 
-				while (flag)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
 				{
-					tmp = _root;
-					flag = false;
-					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
-					{
-						tmpfather = tmp;
-						if (_key < tmp->_pair.first)
-							tmp = tmp->sx;
-						else if (_key > tmp->_pair.first)
-							tmp = tmp->dx;
-					}
-					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
-					{
-						erase(iterator(tmp));
-						ret += 1;
-						flag = true;
-					}
+					tmpfather = tmp;
+					if (_key < tmp->_pair.first)
+						tmp = tmp->sx;
+					else if (_key > tmp->_pair.first)
+						tmp = tmp->dx;
 				}
-				return ret;
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+				{
+					erase(iterator(tmp));
+					return 1;
+				}
+				return 0;
 			}
 			void	clear(void)
 			{
@@ -624,9 +620,9 @@ namespace ft
 					return 1;
 				return 0;
 			}
-			void	swap(MultiMap& x)
+			void	swap(Map& x)
 			{
-				MultiMap tmp(this->begin(), this->end());
+				Map tmp(this->begin(), this->end());
 				this->clear();
 				_root = nullptr;
 				*this = x;
