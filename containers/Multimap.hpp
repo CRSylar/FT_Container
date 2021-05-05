@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 12:58:39 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:09:11 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -497,11 +497,13 @@ namespace ft
 			{
 				node tmp = _root;
 				node tmpfather;
+				size_type	ret = 0;
 				bool flag = true;
 
 				while (flag)
 				{
 					flag = false;
+					tmp = _root;
 					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
 					{
 						tmpfather = tmp;
@@ -514,10 +516,10 @@ namespace ft
 					{
 						flag = true;
 						erase(iterator(tmp));
-						return 1;
+						ret += 1;
 					}
 				}
-				return 0;
+				return ret;
 			}
 			void	clear(void)
 			{
