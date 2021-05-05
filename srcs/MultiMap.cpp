@@ -1,12 +1,13 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Map.cpp                                            :+:      :+:    :+:   */
+/*   MultiMap.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 09:27:54 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:57:39 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +18,7 @@ static void	print_header(std::string _test)
 	if (_test == "")
 	{
 		std::cout << "**************************************" << std::endl;
-		std::cout << "*	  Testing Maps	  *" << std::endl;
+		std::cout << "*	  Testing MultiMaps	  *" << std::endl;
 		std::cout << "**************************************" << std::endl;
 	}
 	else
@@ -30,8 +31,7 @@ static void	print_header(std::string _test)
 
 static void	test_constructor(void)
 {
-	ft::Map<std::string, int> mymap;
-	std::map<std::string, int> remap;
+	ft::MultiMap<std::string, int> mymap;
 
 	print_header("Constructor");
 	std::cout << "mymap instanciated	" << GRN << GOOD << NC << std::endl;
@@ -40,8 +40,8 @@ static void	test_constructor(void)
 
 static void	test_max_size(void)
 {
-	ft::Map<std::string, int> v1;
-	std::map<std::string, int> v2;
+	ft::MultiMap<std::string, int> v1;
+	std::multimap<std::string, int> v2;
 
 	print_header("Max_size");
 	if (v1.max_size() == v2.max_size())
@@ -52,10 +52,12 @@ static void	test_max_size(void)
 
 static void	test_insertion(void)
 {
-	ft::Map<int, int> m1;
+	ft::MultiMap<int, int> m1;
 	print_header("Insertion");
 
 	m1.insert(std::make_pair(10, 42));
+	m1.insert(std::make_pair(10, 42));
+	m1.insert(std::make_pair(13, 21));
 	m1.insert(std::make_pair(13, 21));
 	m1.insert(std::make_pair(18, 14));
 
@@ -64,32 +66,17 @@ static void	test_insertion(void)
 	m1.print();
 }
 
-static void	test_access_op(void)
-{
-	ft::Map<int, int> m1;
-	print_header("Operator[]");
-
-	m1.insert(std::make_pair(10, 42));
-	m1.insert(std::make_pair(13, 21));
-	m1.insert(std::make_pair(18, 14));
-	m1.insert(std::make_pair(1, 7));
-
-	m1.print();
-	std::cout << "m1[10] : " << m1[10] << "  <- If 42 is ok" << std::endl;
-	std::cout << "now testing insertion with [] " << std::endl << std::endl;
-	m1[5];
-	m1.print();
-}
-
 static void	test_erase(void)
 {
-	ft::Map<int, int> m1;
+	ft::MultiMap<int, int> m1;
 	print_header("Erase");
 
 	m1.insert(std::make_pair(10, 42));
 	m1.insert(std::make_pair(13, 21));
 	m1.insert(std::make_pair(18, 14));
 
+	m1.insert(std::make_pair(1, 7));
+	m1.insert(std::make_pair(1, 7));
 	m1.insert(std::make_pair(1, 7));
 	std::cout << "tree before erasing" << std::endl;
 	m1.print();
@@ -102,8 +89,8 @@ static void	test_erase(void)
 
 static void	test_swap(void)
 {
-	ft::Map<int, int> m1;
-	ft::Map<int, int> m2;
+	ft::MultiMap<int, int> m1;
+	ft::MultiMap<int, int> m2;
 	print_header("Swap");
 
 	m1.insert(std::make_pair(10, 42));
@@ -136,14 +123,13 @@ static void	test_swap(void)
 
 }
 
-void	testMap()
+void	testMultimap()
 {
 	print_header("");
 
 	test_constructor();
 	test_max_size();
 	test_insertion();
-	test_access_op();
 	test_erase();
 	test_swap();
 

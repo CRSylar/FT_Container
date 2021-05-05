@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:08:14 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/04 14:54:59 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 09:22:02 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int		main(int ac, char **av)
 			testDequeue();
 			testSet();
 			testMultiset();
-			testMultimap();
 		*/
+		testMultimap();
 	}
 	else if (testname == "vector")
 		testVector();

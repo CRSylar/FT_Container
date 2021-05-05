@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:17:39 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/04 14:57:13 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 09:25:11 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "../containers/Stack.hpp"
 # include "../containers/Queue.hpp"
 # include "../containers/Map.hpp"
+# include "../containers/Multimap.hpp"
 
 
 # define GOOD "✓"
@@ -42,6 +43,7 @@ void	testList(void);
 void	testStack(void);
 void	testQueue(void);
 void	testMap(void);
+void	testMultimap(void);
 
 template <typename T>
 bool operator==(ft::Vector<T> &a, std::vector<T> &b)
