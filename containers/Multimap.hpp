@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 14:45:10 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:32:50 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -617,29 +617,13 @@ namespace ft
 			}
 			size_type	count(const key_type& _k) const
 			{
-				node tmp = _root;
-				bool flag = true;
 				size_type ret = 0;
 
-				while (flag)
+				const_iterator it = begin();
+				for (; it != end(); ++it)
 				{
-					flag = false;
-					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _k)
-					{
-						if (_k < tmp->_pair.first)
-							tmp = tmp->sx;
-						else if (_k > tmp->_pair.first)
-							tmp = tmp->dx;
-					}
-					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _k)
-					{
-						if (tmp->dx != __end && tmp->dx != __rend && tmp->dx != _leaf)
-							tmp = tmp->dx;
-						else
-							tmp = tmp->sx;
-						flag = true;
+					if (it.node()->_pair.first == _k)
 						ret += 1;
-					}
 				}
 				return ret;
 			}
