@@ -81,6 +81,8 @@ static void	test_erase(void)
 	std::cout << "tree before erasing" << std::endl;
 	m1.print();
 
+	std::cout << "number of key 1 -> " << m1.count(1) << std::endl;
+
 	std::cout << "tree after erasing the element with key = 1" << std::endl;
 	m1.erase(1);
 	m1.print();

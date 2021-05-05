@@ -6,12 +6,12 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 16:03:01 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:23:52 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SET_HPP
-# define SET_HPP
+#ifndef MULTISET_HPP
+# define MULTISET_HPP
 
 # define RED	0
 # define BLACK	1
@@ -410,16 +410,14 @@ namespace ft
 					_len += 1;
 					return std::make_pair(begin(), true);
 				}
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != value)
+				while (tmp != __end && tmp != __rend && tmp != _leaf)
 				{
 					tmpfather = tmp;
-					if (value < tmp->_pair)
+					if (value <= tmp->_pair)
 						tmp = tmp->sx;
 					else if (value > tmp->_pair)
 						tmp = tmp->dx;
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == value)
-					return (std::make_pair(iterator(tmp), false));
 				_len += 1;
 				tmp = _new_node(value, 0);
 				_link(tmpfather, tmp, value);
@@ -495,21 +493,29 @@ namespace ft
 			{
 				node tmp = _root;
 				node tmpfather;
+				size_type	ret = 0;
+				bool flag = true;
 
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _key)
+				while (true)
 				{
-					tmpfather = tmp;
-					if (_key < tmp->_pair)
-						tmp = tmp->sx;
-					else if (_key > tmp->_pair)
-						tmp = tmp->dx;
+					flag = false;
+					tmp = _root;
+					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _key)
+					{
+						tmpfather = tmp;
+						if (_key < tmp->_pair)
+							tmp = tmp->sx;
+						else if (_key > tmp->_pair)
+							tmp = tmp->dx;
+					}
+					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _key)
+					{
+						flag = true;
+						erase(iterator(tmp));
+						ret += 1;
+					}
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _key)
-				{
-					erase(iterator(tmp));
-					return 1;
-				}
-				return 0;
+				return ret;
 			}
 			void	clear(void)
 			{
@@ -607,9 +613,31 @@ namespace ft
 			}
 			size_type	count(const val_type& _k) const
 			{
-				if (find(_k) != end())
-					return 1;
-				return 0;
+				node tmp = _root;
+				bool flag = true;
+				size_type ret = 0;
+
+				while (flag)
+				{
+					flag = false;
+					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _k)
+					{
+						if (_k < tmp->_pair)
+							tmp = tmp->sx;
+						else if (_k > tmp->_pair)
+							tmp = tmp->dx;
+					}
+					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _k)
+					{
+						if (tmp->dx != __end && tmp->dx != _leaf && tmp.dx != __rend)
+							tmp = tmp->dx;
+						else
+							tmp = tmp->sx;
+						flag = true;
+						ret += 1;
+					}
+				}
+				return ret;
 			}
 			void	swap(Set& x)
 			{
