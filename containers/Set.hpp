@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Multimap.hpp                                       :+:      :+:    :+:   */
+/*   Set.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 14:45:10 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:02:20 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MULTIMAP_HPP
-# define MULTIMAP_HPP
+#ifndef SET_HPP
+# define SET_HPP
 
 # define RED	0
 # define BLACK	1
@@ -20,16 +20,15 @@
 # include <limits>
 # include <utility>
 # include <functional>
-# include "MapIterator.hpp"
+# include "SetIterator.hpp"
+
 namespace ft
 {
-	template <class Key, class T, class Compare=std::less<Key>, class Alloc=std::allocator<std::pair<const Key, T> > >
-	class MultiMap
+	template <class T, class Compare=std::less<T>, class Alloc=std::allocator<T> >
+	class Set
 	{
 		public:
-			typedef Key										key_type;
 			typedef	T										val_type;
-			typedef	std::pair<const key_type, val_type>		pair_type;
 			typedef	Compare									key_compare;
 			typedef Alloc									alloc_type;
 			typedef	T&										val_ref;
@@ -37,11 +36,11 @@ namespace ft
 			typedef	T*										val_ptr;
 			typedef	const T*								const_val_ptr;
 			typedef	unsigned long							size_type;
-			typedef	RBNode<key_type, val_type>*				node;
-			typedef MapIterator<key_type, val_type>			iterator;
-			typedef Const_MapIterator<key_type, val_type>		const_iterator;
-			typedef ReverseIterator<key_type, val_type>			reverse_iterator;
-			typedef Const_ReverseIterator<key_type, val_type>	const_reverse_iterator;
+			typedef	RBSet<val_type>*				node;
+			typedef SetIterator<val_type>			iterator;
+			typedef Const_SetIterator<val_type>		const_iterator;
+			typedef ReverseSetIterator<val_type>			reverse_iterator;
+			typedef Const_ReverseSetIterator<val_type>	const_reverse_iterator;
 
 			class	val_comp
 			{
@@ -54,11 +53,11 @@ namespace ft
 					}
 				public:
 					typedef bool			res_type;
-					typedef pair_type		first_arg;
-					typedef	pair_type		second_arg;
-					bool	operator()(const pair_type& x, const pair_type& y) const
+					typedef val_type		first_arg;
+					typedef	val_type		second_arg;
+					bool	operator()(const val_type& x, const val_type& y) const
 					{
-						return comp(x.first, y.first);
+						return comp(x, y);
 					}
 			};
 
@@ -81,15 +80,15 @@ namespace ft
 					std::cout << std::setw(widh) << ' ';
 					if (n->color == RED)
 						std::cout << "\x1B[31m";
-					std::cout << n->_pair.first << " = " << n->_pair.second << "\033[0m" << std::endl;
+					std::cout << n->_pair << "\033[0m" << std::endl;
 				}
 				if (n->sx != __rend && n->sx != _leaf)
 					_print_node(n->sx, widh + 4);
 			}
-			node	_new_node(key_type _key, val_type _value, node _father)
+			node	_new_node(val_type _value, node _father)
 			{
-				node _new_ = new RBNode<key_type, val_type>();
-				_new_->_pair = std::make_pair(_key, _value);
+				node _new_ = new RBSet<val_type>();
+				_new_->_pair = _value;
 				_new_->father = _father;
 				_new_->color = RED;
 				_new_->_nil = false;
@@ -112,9 +111,9 @@ namespace ft
 			}
 			void	_init_tree(void)
 			{
-				_leaf = new RBNode<key_type,val_type>();
-				__end = new RBNode<key_type,val_type>();
-				__rend = new RBNode<key_type,val_type>();
+				_leaf = new RBSet<val_type>();
+				__end = new RBSet<val_type>();
+				__rend = new RBSet<val_type>();
 				_leaf->_nil = __end->_nil = __rend->_nil = true;
 				__end->_bound = true;
 				__rend->_bound = true;
@@ -122,11 +121,11 @@ namespace ft
 				_root = 0;
 				_len = 0;
 			}
-			void	_link(node& _u, node& _new_, key_type _key)
+			void	_link(node& _u, node& _new_, val_type _key)
 			{
 				if (_u)
 				{
-				if (_key < _u->_pair.first)
+				if (_key < _u->_pair)
 					{
 						if (_u->sx == __rend)
 						{
@@ -323,28 +322,28 @@ namespace ft
 				_print_node(_root);
 			}
 
-			explicit MultiMap(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
+			explicit Set(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
 				_init_tree();
 			}
 			template <class InputIterator>
-			MultiMap(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
+			Set(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
 				_allocator(alloc), _comp(comp)
 				{
 					_init_tree();
 					insert(first, last);
 				}
-			MultiMap(const MultiMap<Key, T>& src)
+			Set(const Set<T>& src)
 			{
 				_init_tree();
 				*this = src;
 			}
-			~MultiMap(void)
+			~Set(void)
 			{
 				_free_tree(_root);
 			}
-			MultiMap&	operator=(const MultiMap<Key, T>& rght)
+			Set&	operator=(const Set<T>& rght)
 			{
 				//this->clear();
 				insert(rght.begin(), rght.end());
@@ -393,16 +392,16 @@ namespace ft
 			}
 			size_type	max_size(void) const
 			{
-				return (std::numeric_limits<size_type>::max() / (sizeof(ft::RBNode<key_type, val_type>)));
+				return (std::numeric_limits<size_type>::max() / (sizeof(ft::RBSet<val_type>)));
 			}
-			std::pair<iterator, bool>	insert(const pair_type& value)
+			std::pair<iterator, bool>	insert(const val_type& value)
 			{
 				node tmp = _root;
 				node tmpfather;
 
 				if (!_root)
 				{
-					_root = _new_node(value.first, value.second, 0);
+					_root = _new_node(value, 0);
 					_root->color = BLACK;
 					_root->sx = __rend;
 					_root->dx = __end;
@@ -411,36 +410,36 @@ namespace ft
 					_len += 1;
 					return std::make_pair(begin(), true);
 				}
-				while (tmp != __end && tmp != __rend && tmp != _leaf)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != value)
 				{
 					tmpfather = tmp;
-					if (value.first <= tmp->_pair.first)
+					if (value < tmp->_pair)
 						tmp = tmp->sx;
-					else if (value.first > tmp->_pair.first)
+					else if (value > tmp->_pair)
 						tmp = tmp->dx;
 				}
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == value)
+					return (std::make_pair(iterator(tmp), false));
 				_len += 1;
-				tmp = _new_node(value.first, value.second, 0);
-				_link(tmpfather, tmp, value.first);
+				tmp = _new_node(value, 0);
+				_link(tmpfather, tmp, value);
 				_balance_insert(tmp);
 				return (std::make_pair(iterator(tmp), true));
 			}
-			iterator	insert(iterator _pos, const pair_type& value)
+			iterator	insert(iterator _pos, const val_type& value)
 			{
-				pair_type ret = insert(value);
-				_pos = ret.first;
+				val_type ret = insert(value);
+				_pos = ret;
 				return _pos;
 			}
 			template <class InputIterator>
-			std::pair<iterator, bool>	insert(InputIterator first, InputIterator last)
+			void	insert(InputIterator first, InputIterator last)
 			{
-				std::pair<iterator, bool> _pair;
 				while (first != last && first != 0)
 				{
-					_pair = insert(*first);
+					insert(*first);
 					++first;
 				}
-				return _pair;
 			}
 			template <class InputIterator>
 			void	erase(InputIterator _pos)
@@ -448,24 +447,23 @@ namespace ft
 				node tmp = _root;
 				node tmpfather;
 
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _pos.node()->_pair.first)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _pos.node()->_pair)
 				{
 					tmpfather = tmp;
-					if (_pos.node()->_pair.first < tmp->_pair.first)
+					if (_pos.node()->_pair < tmp->_pair)
 						tmp = tmp->sx;
-					else if (_pos.node()->_pair.first > tmp->_pair.first)
+					else if (_pos.node()->_pair > tmp->_pair)
 						tmp = tmp->dx;
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _pos.node()->_pair.first)
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _pos.node()->_pair)
 				{
 					if ((tmp->sx != __rend) && (tmp->sx != _leaf) && (tmp->dx != _leaf) && (tmp->dx != __end))
 					{
 						node _min = tmp->dx;
 						while (_min->sx != __rend && _min->sx != _leaf)
 							_min = _min->sx;
-						tmp->_pair.first = _min->_pair.first;
-						tmp->_pair.second = _min->_pair.second;
-						_pos.node()->_pair.first = _min->_pair.first;
+						val_type* __tmp = const_cast<val_type*>(&tmp->_pair);
+						*__tmp = _min->_pair;
 						tmp = _min;
 					}
 					node _t;
@@ -473,7 +471,7 @@ namespace ft
 						_t = tmp->sx;
 					else
 						_t = tmp->dx;
-					_link(tmp->father, _t, _pos.node()->_pair.first);
+					_link(tmp->father, _t, _pos.node()->_pair);
 						if (tmp->color == BLACK)
 							balance_delete(_t);
 						if (tmp->father == 0)
@@ -493,39 +491,31 @@ namespace ft
 					++first;
 				}
 			}
-			size_type	erase(const key_type& _key)
+			size_type	erase(const val_type& _key)
 			{
 				node tmp = _root;
 				node tmpfather;
-				size_type	ret = 0;
-				bool flag = true;
 
-				while (flag)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _key)
 				{
-					flag = false;
-					tmp = _root;
-					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
-					{
-						tmpfather = tmp;
-						if (_key < tmp->_pair.first)
-							tmp = tmp->sx;
-						else if (_key > tmp->_pair.first)
-							tmp = tmp->dx;
-					}
-					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
-					{
-						flag = true;
-						erase(iterator(tmp));
-						ret += 1;
-					}
+					tmpfather = tmp;
+					if (_key < tmp->_pair)
+						tmp = tmp->sx;
+					else if (_key > tmp->_pair)
+						tmp = tmp->dx;
 				}
-				return ret;
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _key)
+				{
+					erase(iterator(tmp));
+					return 1;
+				}
+				return 0;
 			}
 			void	clear(void)
 			{
 				erase(this->begin(), this->end());
 			}
-			iterator	lower_bound(const key_type& _k)
+			iterator	lower_bound(const val_type& _k)
 			{
 				for (iterator it = begin(); it != end(); ++it)
 				{
@@ -534,7 +524,7 @@ namespace ft
 				}
 				return end();
 			}
-			const_iterator	lower_bound(const key_type& _k) const
+			const_iterator	lower_bound(const val_type& _k) const
 			{
 				for (const_iterator it = begin(); it != end(); ++it)
 				{
@@ -543,7 +533,7 @@ namespace ft
 				}
 				return end();
 			}
-			iterator	upper_bound(const key_type& _k)
+			iterator	upper_bound(const val_type& _k)
 			{
 				for (iterator it = begin(); it != end(); ++it)
 				{
@@ -552,7 +542,7 @@ namespace ft
 				}
 				return end();
 			}
-			const_iterator	upper_bound(const key_type& _k) const
+			const_iterator	upper_bound(const val_type& _k) const
 			{
 				for (const_iterator it = begin(); it != end(); ++it)
 				{
@@ -561,19 +551,19 @@ namespace ft
 				}
 				return end();
 			}
-			std::pair<iterator, iterator>	equal_range(const key_type& _k)
+			std::pair<iterator, iterator>	equal_range(const val_type& _k)
 			{
 				std::pair<iterator, iterator> _ret;
 
-				_ret.first = lower_bound(_k);
+				_ret = lower_bound(_k);
 				_ret.second = upper_bound(_k);
 				return _ret;
 			}
-			std::pair<const_iterator, const_iterator>	equal_range(const key_type& _k) const
+			std::pair<const_iterator, const_iterator>	equal_range(const val_type& _k) const
 			{
 				std::pair<const_iterator, const_iterator> _ret;
 
-				_ret.first = lower_bound(_k);
+				_ret = lower_bound(_k);
 				_ret.second = upper_bound(_k);
 				return _ret;
 			}
@@ -585,67 +575,45 @@ namespace ft
 			{
 				return val_comp();
 			}
-			iterator	find(const key_type& _key)
+			iterator	find(const val_type& _key)
 			{
 				node tmp = _root;
 
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _key)
 				{
-					if (_key < tmp->_pair.first)
+					if (_key < tmp->_pair)
 						tmp = tmp->sx;
-					else if (_key > tmp->_pair.first)
+					else if (_key > tmp->_pair)
 						tmp = tmp->dx;
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _key)
 					return (iterator(tmp));
 				return end();
 			}
-			const_iterator	find(const key_type& _key) const
+			const_iterator	find(const val_type& _key) const
 			{
 				node tmp = _root;
 
-				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _key)
+				while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair != _key)
 				{
-					if (_key < tmp->_pair.first)
+					if (_key < tmp->_pair)
 						tmp = tmp->sx;
-					else if (_key > tmp->_pair.first)
+					else if (_key > tmp->_pair)
 						tmp = tmp->dx;
 				}
-				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _key)
+				if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair == _key)
 					return (const_iterator(tmp));
 				return end();
 			}
-			size_type	count(const key_type& _k) const
+			size_type	count(const val_type& _k) const
 			{
-				node tmp = _root;
-				bool flag = true;
-				size_type ret = 0;
-
-				while (flag)
-				{
-					flag = false;
-					while (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first != _k)
-					{
-						if (_k < tmp->_pair.first)
-							tmp = tmp->sx;
-						else if (_k > tmp->_pair.first)
-							tmp = tmp->dx;
-					}
-					if (tmp != __end && tmp != __rend && tmp != _leaf && tmp->_pair.first == _k)
-					{
-						if (tmp->dx != __end && tmp->dx != __rend && tmp->dx != _leaf)
-							tmp = tmp->dx;
-						else
-							tmp = tmp->sx;
-						flag = true;
-						ret += 1;
-					}
-				}
-				return ret;
+				if (find(_k) != end())
+					return 1;
+				return 0;
 			}
-			void	swap(MultiMap& x)
+			void	swap(Set& x)
 			{
-				MultiMap tmp(this->begin(), this->end());
+				Set tmp(this->begin(), this->end());
 				this->clear();
 				_root = nullptr;
 				*this = x;
