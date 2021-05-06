@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:17:39 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/06 10:12:13 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:49:58 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stack>
 # include <map>
 # include <set>
+# include <deque>
 # include "../containers/List.hpp"
 # include "../containers/Vector.hpp"
 # include "../containers/Stack.hpp"
@@ -29,6 +30,7 @@
 # include "../containers/Map.hpp"
 # include "../containers/Multimap.hpp"
 # include "../containers/Set.hpp"
+# include "../containers/Deque.hpp"
 # include "../containers/MultiSet.hpp"
 
 
@@ -49,6 +51,7 @@ void	testMap(void);
 void	testMultimap(void);
 void	testSet(void);
 void	testMultiSet(void);
+void	testDeque(void);
 
 template <typename T>
 bool operator==(ft::Vector<T> &a, std::vector<T> &b)
@@ -80,6 +83,21 @@ bool operator==(ft::List<T> &a, std::list<T> &b)
 			return (false);
 		++it;
 		++it2;
+	}
+	return (true);
+}
+
+template <typename T>
+bool operator==(ft::Deque<T> &a, std::deque<T> &b)
+{
+	if (a.size() != b.size())
+		return (false);
+	if (a.empty() != b.empty())
+		return (false);
+	for (size_t i = 0; i < a.size(); i++)
+	{
+		if (a[i] != b[i])
+			return (false);
 	}
 	return (true);
 }

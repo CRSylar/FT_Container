@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:08:14 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/06 10:15:19 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:54:37 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		main(int ac, char **av)
 			testSet();
 			testMultimap();
 			testMultiSet();
-//			testDequeue();
+			testDeque();
 		}
 	}
 	else if (testname == "vector")
@@ -53,5 +53,7 @@ int		main(int ac, char **av)
 		testSet();
 	else if (testname == "multiset")
 		testMultiSet();
+	else if (testname == "deque")
+		testDeque();
 	return (0);
 }

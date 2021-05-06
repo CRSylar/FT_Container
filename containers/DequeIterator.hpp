@@ -6,14 +6,13 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:25:24 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/06 13:15:43 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:18:54 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEQUEITERATOR_HPP
 # define DEQUEITERATOR_HPP
 
-# include "Deque.hpp"
 # include "Utils.hpp"
 
 namespace ft
@@ -29,7 +28,11 @@ namespace ft
 			pointer _ptr;
 		public:
 			DequeIterator(void)
-			{}
+			{
+				_ptr->__first = _ptr->_data;
+				_ptr->__ptr = _ptr->__first;
+				_ptr->__last = _ptr->_data;
+			}
 			DequeIterator(const DequeIterator &other)
 			{
 				*this = other;
@@ -50,15 +53,18 @@ namespace ft
 			}
 			DequeIterator &operator++(void)
 			{
-				if (&(*this) - _ptr->data < 32)
-					*this += 1;
+				if (_ptr->__ptr - _ptr->_data < 32)
+					_ptr->__ptr += 1;
 				else
 					_ptr = _ptr->next;
 				return (*this);
 			}
 			DequeIterator &operator--(void)
 			{
-				_ptr = _ptr->prev;
+				if (_ptr->__ptr - _ptr->_data > 0)
+					_ptr->__ptr -= 1;
+				else
+					_ptr = _ptr->prev;
 				return (*this);
 			}
 			DequeIterator operator++(int)
@@ -99,11 +105,11 @@ namespace ft
 			}
 			value_type &operator*(void)
 			{
-				return (_ptr->data);
+				return (_ptr->__ptr);
 			}
 			value_type *operator->(void)
 			{
-				return (_ptr->data);
+				return (_ptr->__ptr);
 			}
 			DequeIterator operator+(int n) const
 			{
@@ -121,12 +127,12 @@ namespace ft
 			{
 				while (n < 0)
 				{
-					(*this)--;
+					operator--();
 					n++;
 				}
 				while (n > 0)
 				{
-					(*this)++;
+					operator++();
 					n--;
 				}
 				return (*this);
@@ -178,12 +184,18 @@ namespace ft
 			}
 			ConstDequeIterator &operator++(void)
 			{
-				_ptr = _ptr->next;
+				if (_ptr->__ptr - _ptr->data < 32)
+					_ptr->__ptr += 1;
+				else
+					_ptr = _ptr->next;
 				return (*this);
 			}
 			ConstDequeIterator &operator--(void)
 			{
-				_ptr = _ptr->prev;
+				if (_ptr->__ptr - _ptr->_data > 0)
+					_ptr->__ptr -= 1;
+				else
+					_ptr = _ptr->prev;
 				return (*this);
 			}
 			ConstDequeIterator operator++(int)
@@ -246,12 +258,12 @@ namespace ft
 			{
 				while (n < 0)
 				{
-					(*this)--;
+					operator--();
 					n++;
 				}
 				while (n > 0)
 				{
-					(*this)++;
+					operator++();
 					n--;
 				}
 				return (*this);
@@ -295,12 +307,18 @@ namespace ft
 			{}
 			ReverseDequeIterator &operator++(void)
 			{
-				this->_ptr = this->_ptr->prev;
+				if (_ptr->__ptr - _ptr->_data > 0)
+					_ptr->__ptr -= 1;
+				else
+					_ptr = _ptr->prev;
 				return (*this);
 			}
 			ReverseDequeIterator &operator--(void)
 			{
-				this->_ptr = this->_ptr->next;
+				if (_ptr->__ptr - _ptr->data < 32)
+					_ptr->__ptr += 1;
+				else
+					_ptr = _ptr->next;
 				return (*this);
 			}
 			ReverseDequeIterator operator++(int)
@@ -363,12 +381,12 @@ namespace ft
 			{
 				while (n < 0)
 				{
-					(*this)--;
+					operator--();
 					n++;
 				}
 				while (n > 0)
 				{
-					(*this)++;
+					operator++();
 					n--;
 				}
 				return (*this);
@@ -412,16 +430,23 @@ namespace ft
 			{}
 			ConstReverseDequeIterator &operator++(void)
 			{
-				this->_ptr = this->_ptr->prev;
+				if (_ptr->__ptr - _ptr->_data > 0)
+					_ptr->__ptr -= 1;
+				else
+					_ptr = _ptr->prev;
 				return (*this);
 			}
 			ConstReverseDequeIterator &operator--(void)
 			{
-				this->_ptr = this->_ptr->next;
+				if (_ptr->__ptr - _ptr->data < 32)
+					_ptr->__ptr += 1;
+				else
+					_ptr = _ptr->next;
 				return (*this);
 			}
 			ConstReverseDequeIterator operator++(int)
 			{
+
 				ConstReverseDequeIterator tmp(*this);
 				operator++();
 				return (tmp);
@@ -480,12 +505,12 @@ namespace ft
 			{
 				while (n < 0)
 				{
-					(*this)--;
+					operator--();
 					n++;
 				}
 				while (n > 0)
 				{
-					(*this)++;
+					operator++();
 					n--;
 				}
 				return (*this);
