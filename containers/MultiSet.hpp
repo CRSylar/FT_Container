@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 16:33:37 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 10:17:22 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 namespace ft
 {
 	template <class T, class Compare=std::less<T>, class Alloc=std::allocator<T> >
-	class Set
+	class MultiSet
 	{
 		public:
 			typedef	T										val_type;
@@ -322,28 +322,28 @@ namespace ft
 				_print_node(_root);
 			}
 
-			explicit Set(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
+			explicit MultiSet(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
 			{
 				_init_tree();
 			}
 			template <class InputIterator>
-			Set(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
+			MultiSet(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const alloc_type alloc = alloc_type()) :
 				_allocator(alloc), _comp(comp)
 				{
 					_init_tree();
 					insert(first, last);
 				}
-			Set(const Set<T>& src)
+			MultiSet(const MultiSet<T>& src)
 			{
 				_init_tree();
 				*this = src;
 			}
-			~Set(void)
+			~MultiSet(void)
 			{
 				_free_tree(_root);
 			}
-			Set&	operator=(const Set<T>& rght)
+			MultiSet&	operator=(const MultiSet<T>& rght)
 			{
 				//this->clear();
 				insert(rght.begin(), rght.end());
@@ -496,7 +496,7 @@ namespace ft
 				size_type	ret = 0;
 				bool flag = true;
 
-				while (true)
+				while (flag)
 				{
 					flag = false;
 					tmp = _root;
@@ -624,9 +624,9 @@ namespace ft
 				}
 				return ret;
 			}
-			void	swap(Set& x)
+			void	swap(MultiSet& x)
 			{
-				Set tmp(this->begin(), this->end());
+				MultiSet tmp(this->begin(), this->end());
 				this->clear();
 				_root = nullptr;
 				*this = x;

@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:17:39 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 14:50:52 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 10:12:13 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "../containers/Map.hpp"
 # include "../containers/Multimap.hpp"
 # include "../containers/Set.hpp"
+# include "../containers/MultiSet.hpp"
 
 
 # define GOOD "✓"
@@ -47,6 +48,7 @@ void	testQueue(void);
 void	testMap(void);
 void	testMultimap(void);
 void	testSet(void);
+void	testMultiSet(void);
 
 template <typename T>
 bool operator==(ft::Vector<T> &a, std::vector<T> &b)

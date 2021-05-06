@@ -6,7 +6,7 @@
 #    By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 09:01:51 by cromalde          #+#    #+#              #
-#    Updated: 2021/05/05 16:26:09 by cromalde         ###   ########.fr        #
+#    Updated: 2021/05/06 10:10:15 by cromalde         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ SRCS	=	./srcs/main.cpp \
 			./srcs/Queue.cpp \
 			./srcs/Map.cpp \
 			./srcs/MultiMap.cpp \
-			./srcs/Set.cpp
-#			./srcs/MultiSet.cpp
+			./srcs/Set.cpp \
+			./srcs/Multiset.cpp
 
 OBJ		= $(SRCS:.cpp=.o)
 
