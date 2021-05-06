@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 11:26:46 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 15:38:47 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 12:54:39 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,15 @@ namespace ft
 			father = src.father;
 			color = src.color;
 		}
+	};
+
+	template<class T>
+	struct DQNode
+	{
+		T		data[32];
+		bool	flag;
+		Node	*prev;
+		Node	*next;
 	};
 }
 
