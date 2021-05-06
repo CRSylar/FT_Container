@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 12:59:26 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:15:05 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,11 +317,11 @@ namespace ft
 				}
 			}
 		public:
-
+/*
 			void	print(void)
 			{
 				_print_node(_root);
-			}
+			} */
 
 			explicit Map(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
@@ -622,13 +622,12 @@ namespace ft
 			}
 			void	swap(Map& x)
 			{
-				Map tmp(this->begin(), this->end());
-				this->clear();
-				_root = nullptr;
-				*this = x;
-				x.clear();
-				x._root = nullptr;
-				x = tmp;
+				ft::swap(this->_root, x._root);
+				ft::swap(this->__end, x.__end);
+				ft::swap(this->__rend, x.__rend);
+				ft::swap(this->_leaf, x._leaf);
+				ft::swap(this->_len, x._len);
+
 			}
 	};
 };

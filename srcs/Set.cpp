@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 16:02:09 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:06:23 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,18 @@ static void	print_header(std::string _test)
 		std::cout << CYAN << "**************************************" << NC << std::endl;
 	}
 }
+
+template <typename T1, typename T2>
+static void	_print_node(T1 begin, T1 end, T2 __begin, T2 __end)
+			{
+				for (; begin != end; ++begin)
+					std::cout << (*begin) << " - ";
+				std::cout << std::endl;
+				std::cout << std::endl;
+				for (; __begin != __end; ++__begin)
+					std::cout << (*__begin) << " - ";
+				std::cout << std::endl;
+			}
 
 static void	test_constructor(void)
 {
@@ -53,33 +65,43 @@ static void	test_max_size(void)
 static void	test_insertion(void)
 {
 	ft::Set<int> m1;
+	std::set<int> m2;
 	print_header("Insertion");
 
 	m1.insert(42);
 	m1.insert(21);
 	m1.insert(14);
-
 	m1.insert(7);
-	std::cout << "m1 : " << std::endl << std::endl;
-	m1.print();
-	}
+
+	m2.insert(42);
+	m2.insert(21);
+	m2.insert(14);
+	m2.insert(7);
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
+}
 
 static void	test_erase(void)
 {
 	ft::Set<int> m1;
+	std::set<int>m2;
 	print_header("Erase");
 
 	m1.insert(42);
 	m1.insert(21);
 	m1.insert(14);
-
 	m1.insert(7);
+
+	m2.insert(42);
+	m2.insert(21);
+	m2.insert(14);
+	m2.insert(7);
 	std::cout << "tree before erasing" << std::endl;
-	m1.print();
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 
 	std::cout << "tree after erasing the element with key = 21" << std::endl;
 	m1.erase(21);
-	m1.print();
+	m2.erase(21);
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 
 }
 
@@ -95,7 +117,7 @@ static void	test_swap(void)
 	m1.insert(7);
 
 	std::cout << "m1 tree : " << std::endl;
-	m1.print();
+
 
 	m2.insert(512);
 	m2.insert(128);
@@ -105,17 +127,18 @@ static void	test_swap(void)
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << "m2 tree : " << std::endl;
-	m2.print();
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
+
 	std::cout << "swapping m1 - m2.... " << std::endl;
 	m1.swap(m2);
 	std::cout << "m1 tree : " << std::endl;
-	m1.print();
+
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << "m2 tree : " << std::endl;
-	m2.print();
 
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 
 }
 

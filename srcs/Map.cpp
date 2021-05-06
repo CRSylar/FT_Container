@@ -6,11 +6,23 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 09:16:59 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 12:52:34 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:09:34 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tester.hpp"
+
+template <typename T1, typename T2>
+static void	_print_node(T1 begin, T1 end, T2 __begin, T2 __end)
+			{
+				for (; begin != end; ++begin)
+					std::cout << (*begin).first << " - ";
+				std::cout << std::endl;
+				std::cout << std::endl;
+				for (; __begin != __end; ++__begin)
+					std::cout << (*__begin).first << " - ";
+				std::cout << std::endl;
+			}
 
 static void	print_header(std::string _test)
 {
@@ -52,16 +64,21 @@ static void	test_max_size(void)
 
 static void	test_insertion(void)
 {
-	ft::Map<int, int> m1;
+	ft::Map<int, std::string> m1;
 	print_header("Insertion");
 
-	m1.insert(std::make_pair(10, 42));
-	m1.insert(std::make_pair(13, 21));
-	m1.insert(std::make_pair(18, 14));
+	m1.insert(std::make_pair(10, "42"));
+	m1.insert(std::make_pair(13, "21"));
+	m1.insert(std::make_pair(18, "14"));
+	m1.insert(std::make_pair(1, "7"));
 
-	m1.insert(std::make_pair(1, 7));
-	std::cout << "m1 : " << std::endl << std::endl;
-	m1.print();
+	std::map<int, std::string> m2;
+	m2.insert(std::make_pair(10, "42"));
+	m2.insert(std::make_pair(13, "21"));
+	m2.insert(std::make_pair(18, "14"));
+	m2.insert(std::make_pair(1, "7"));
+
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 }
 
 static void	test_access_op(void)
@@ -73,12 +90,22 @@ static void	test_access_op(void)
 	m1.insert(std::make_pair(13, 21));
 	m1.insert(std::make_pair(18, 14));
 	m1.insert(std::make_pair(1, 7));
+	std::map<int, std::string> m2;
+	m2.insert(std::make_pair(10, "42"));
+	m2.insert(std::make_pair(13, "21"));
+	m2.insert(std::make_pair(18, "14"));
+	m2.insert(std::make_pair(1, "7"));
 
-	m1.print();
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
+	std::cout << std::endl;
+
 	std::cout << "m1[10] : " << m1[10] << "  <- If 42 is ok" << std::endl;
+	std::cout << std::endl;
 	std::cout << "now testing insertion with [] " << std::endl << std::endl;
 	m1[5];
-	m1.print();
+	m2[5];
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
+
 }
 
 static void	test_erase(void)
@@ -89,15 +116,22 @@ static void	test_erase(void)
 	m1.insert(std::make_pair(10, 42));
 	m1.insert(std::make_pair(13, 21));
 	m1.insert(std::make_pair(18, 14));
-
 	m1.insert(std::make_pair(1, 7));
+
+	std::map<int, std::string> m2;
+	m2.insert(std::make_pair(10, "42"));
+	m2.insert(std::make_pair(13, "21"));
+	m2.insert(std::make_pair(18, "14"));
+	m2.insert(std::make_pair(1, "7"));
+
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
+
 	std::cout << "tree before erasing" << std::endl;
-	m1.print();
 
 	std::cout << "tree after erasing the element with key = 13" << std::endl;
 	m1.erase(13);
-	m1.print();
-
+	m2.erase(13);
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 }
 
 static void	test_swap(void)
@@ -112,28 +146,22 @@ static void	test_swap(void)
 	m1.insert(std::make_pair(1, 7));
 
 	std::cout << "m1 tree : " << std::endl;
-	m1.print();
+
 
 	m2.insert(std::make_pair(2, 512));
 	m2.insert(std::make_pair(4, 128));
 	m2.insert(std::make_pair(8, 1024));
 	m2.insert(std::make_pair(16, 64));
 	m2.insert(std::make_pair(32, 2048));
-	std::cout << std::endl;
-	std::cout << std::endl;
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 	std::cout << "m2 tree : " << std::endl;
-	m2.print();
+	std::cout << std::endl;
+	std::cout << std::endl;
 	std::cout << "swapping m1 - m2.... " << std::endl;
 	m1.swap(m2);
 	std::cout << "m1 tree : " << std::endl;
-	m1.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
+	_print_node(m1.begin(), m1.end(), m2.begin(), m2.end());
 	std::cout << "m2 tree : " << std::endl;
-	m2.print();
-
-
 }
 
 void	testMap()

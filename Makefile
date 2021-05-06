@@ -6,7 +6,7 @@
 #    By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 09:01:51 by cromalde          #+#    #+#              #
-#    Updated: 2021/05/06 15:48:16 by cromalde         ###   ########.fr        #
+#    Updated: 2021/05/06 17:47:50 by cromalde         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,7 @@ SRCS	=	./srcs/main.cpp \
 OBJ		= $(SRCS:.cpp=.o)
 
 CC		=	clang++
-CFL		=	-Wall -Wextra -Werror -g
-#-fsanitize=address
+CFL		=	-Wall -Wextra -Werror -g -fsanitize=address
 RM		=	rm -rf
 
 .PHONY:		all clean fclean re

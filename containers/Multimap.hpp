@@ -6,7 +6,7 @@
 /*   By: cromalde <cromalde@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/30 11:25:48 by cromalde          #+#    #+#             */
-/*   Updated: 2021/05/05 16:32:50 by cromalde         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:51:17 by cromalde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,11 +317,11 @@ namespace ft
 				}
 			}
 		public:
-
+/*
 			void	print(void)
 			{
 				_print_node(_root);
-			}
+			} */
 
 			explicit MultiMap(const key_compare& comp = key_compare(), const alloc_type alloc=alloc_type()) :
 				_allocator(alloc), _comp(comp)
@@ -478,6 +478,8 @@ namespace ft
 							balance_delete(_t);
 						if (tmp->father == 0)
 							_root = _t;
+						if (tmp->sx == __rend)
+							__rend->father = _t->father;
 					delete tmp;
 					_len -= 1;
 				}
@@ -629,13 +631,11 @@ namespace ft
 			}
 			void	swap(MultiMap& x)
 			{
-				MultiMap tmp(this->begin(), this->end());
-				this->clear();
-				_root = nullptr;
-				*this = x;
-				x.clear();
-				x._root = nullptr;
-				x = tmp;
+				ft::swap(this->_root, x._root);
+				ft::swap(this->__end, x.__end);
+				ft::swap(this->__rend, x.__rend);
+				ft::swap(this->_leaf, x._leaf);
+				ft::swap(this->_len, x._len);
 			}
 	};
 };
