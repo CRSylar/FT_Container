@@ -4,6 +4,5 @@
 
 Deep look into the STL library of c++, we have to reimplement the standard containers using the appropriate data structure.
 
-For Queue and Stack i use the List container as substructure, because the Deque is not included just as a bonus.
+For Queue and Stack i use the List container as substructure, because the Deque is requested as a bonus.
 
-For Deque i used just a vector, so the performance of it is not so well
